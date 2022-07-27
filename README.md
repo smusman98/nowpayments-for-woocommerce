@@ -1,5 +1,5 @@
 === NOWPayments For WooCommerce ===
-Contributors: SCI Intelligencia, smusman98
+Contributors: smusman98
 Tags: woocommerce, nowpayments, payment, payment gateway, commerce, product
 Requires at least: 4.9
 Tested up to: 6.0
