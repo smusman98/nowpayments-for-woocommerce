@@ -63,19 +63,35 @@ class NPWC_Gateway extends WC_Payment_Gateway {
             ),
             'live_api_key' => array(
                 'title'       => 'Live API Key',
-                'type'        => 'password'
+                'type'        => 'password',
+                'description' => sprintf(
+                        'Get your API: %s',
+                        esc_url( 'https://account.nowpayments.io/store-settings' )
+                ),
             ),
             'live_ipn_key' => array(
                 'title'       => 'Live IPN Secret Key',
-                'type'        => 'text'
+                'type'        => 'text',
+                'description' => sprintf(
+                    'Get your IPN Secret Key: %s',
+                    esc_url( 'https://account.nowpayments.io/store-settings' )
+                ),
             ),
             'sandbox_api_key' => array(
                 'title'       => 'SandBox API Key',
-                'type'        => 'password'
+                'type'        => 'password',
+                'description' => sprintf(
+                    'Get your API: %s',
+                    esc_url( 'https://account-sandbox.nowpayments.io/store-settings' )
+                ),
             ),
             'sandbox_ipn_key' => array(
                 'title'       => 'SandBox IPN Secret Key',
-                'type'        => 'text'
+                'type'        => 'text',
+                'description' => sprintf(
+                    'Get your IPN Secret Key: %s',
+                    esc_url( 'https://account-sandbox.nowpayments.io/store-settings' )
+                ),
             ),
             'webhook_url' => array(
                 'title'             =>  'Webhook URL',
