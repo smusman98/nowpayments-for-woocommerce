@@ -1,9 +1,10 @@
 === NOWPayments For WooCommerce ===
 Contributors: smusman98
+Donate link: https://scintelligencia.com/products/nowpayments-for-woocommerce-pro/
 Tags: woocommerce, nowpayments, payment, payment gateway, commerce, product
 Requires at least: 4.9
 Tested up to: 6.0
-Stable tag: 1.0
+Stable tag: 1.0.1
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -20,6 +21,14 @@ Fully supported by the SCI Intelligencia team with features that are necessary t
 * Enjoy 24/7 support and personal account manager.
 * Save on fees: cheapest on the crypto market.
 * Feel the freedom of choice with our variety of tools.
+
+= Premium =
+* [Go Pro](https://scintelligencia.com/products/nowpayments-for-woocommerce-pro/)
+* Priority Support
+* Attractive User Interface
+* Easy Setup
+* Top 5 Currency Icons on Products
+* Open for Suggestions
 
 https://youtu.be/-vz3n-UMyTY
 
@@ -195,5 +204,8 @@ Contact: smusman98@gmail.com
 
 == Changelog ==
 
+= 1.0.1 Sept 01, 2022 =
+* URLs Added
+
 = 1.0 July 28, 2022 =
-Initial release.
+* Initial release.

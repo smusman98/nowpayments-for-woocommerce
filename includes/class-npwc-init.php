@@ -85,6 +85,7 @@ class NPWC_Init {
     private function init() {
 
         $this->includes();
+        $this->hooks();
 
     }
 
@@ -98,6 +99,44 @@ class NPWC_Init {
 
         require 'class-gateway.php';
         require 'class-api.php';
+
+    }
+
+    /**
+     * Action, Filter Hooks
+     *
+     * @since 1.0.1
+     * @version 1.0
+     */
+    public function hooks() {
+
+        add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 5 );
+
+    }
+
+    /**
+     * Filter Callback
+     *
+     * @param $plugin_meta
+     * @param $plugin_file
+     * @param $plugin_data
+     * @param $status
+     * @since 1.0.1
+     * @version 1.0
+     */
+    public function plugin_row_meta( $plugin_meta, $plugin_file, $plugin_data, $status ) {
+
+        if( $plugin_data['slug'] == 'nowpayments-for-woocommerce' ) {
+
+            $plugin_meta[] = sprintf(
+                '<a href="%s" style="color: green; font-weight: bold" target="_blank">%s</a>',
+                esc_url( 'https://scintelligencia.com/products/nowpayments-for-woocommerce-pro/' ),
+                __( 'Go PRO' )
+            );
+
+        }
+
+        return $plugin_meta;
 
     }
 
