@@ -1,17 +1,19 @@
 === NOWPayments For WooCommerce ===
 Contributors: smusman98
 Donate link: https://scintelligencia.com/products/nowpayments-for-woocommerce-pro/
-Tags: woocommerce, nowpayments, payment, payment gateway, commerce, product
+Tags: nowpay, woocommerce, ecommerce, woo, commerce, bitcoin, ethereum, litecoin, bitcash, blockchain, crypto, cryptocurrency
 Requires at least: 4.9
 Tested up to: 6.0
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Allow users to checkout with 100+ crypto currencies.
+Allow users to checkout with 150+ crypto currencies.
 
 == Description ==
+
+[Get Pro](https://coderpress.co/products/nowpayments-for-woocommerce/) | [Pro Live Demo](https://nowpayments.coderpress.co/shop/) | [Documentation](https://coderpress.co/docs/nowpayments-for-woocommerce/)
 
 NOWPayments for WooCommerce, It's very easy and simple to use with WooCommerce.
 Fully supported by the SCI Intelligencia team with features that are necessary to keep check.
@@ -22,13 +24,17 @@ Fully supported by the SCI Intelligencia team with features that are necessary t
 * Save on fees: cheapest on the crypto market.
 * Feel the freedom of choice with our variety of tools.
 
-= Premium =
-* [Go Pro](https://scintelligencia.com/products/nowpayments-for-woocommerce-pro/)
+**Premium**
+
+* Top 5 Currency Icons on Products
+* Top 5 Currency Icons on Shop page
 * Priority Support
 * Attractive User Interface
 * Easy Setup
-* Top 5 Currency Icons on Products
 * Open for Suggestions
+* [Go Pro](https://scintelligencia.com/products/nowpayments-for-woocommerce-pro/)
+* [Live Demo](https://nowpayments.coderpress.co/shop/)
+
 
 https://youtu.be/-vz3n-UMyTY
 

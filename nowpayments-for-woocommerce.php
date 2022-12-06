@@ -4,7 +4,7 @@
  * Plugin URI: https://www.scintelligencia.com/
  * Author: SCI Intelligencia
  * Description: Allow WooCommerce user to checkout with 100+ crypto currencies.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Syed Muhammad Usman
  * Author URI: https://www.linkedin.com/in/syed-muhammad-usman/
  * License: GPL v2 or later
@@ -64,7 +64,7 @@ if ( ! defined( 'NPWC_PLUGIN_FILE' ) ) {
 }
 
 if ( ! defined( 'NPWC_VERSION' ) ) {
-    define( 'NPWC_VERSION', '1.0.1' );
+    define( 'NPWC_VERSION', '1.0.2' );
 }
 
 if ( ! defined( 'NPWC_PLUGIN_URL' ) ) {
