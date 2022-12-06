@@ -47,6 +47,18 @@ class NPWC_Gateway extends WC_Payment_Gateway {
                 'label'     =>  'Enable SandBox',
                 'default'   =>  'no'
             ),
+            'single_product_icon'    =>  array(
+	            'title'     =>  'Enable/ Disable',
+	            'type'      =>  'checkbox',
+	            'label'     =>  'Enable Icons on Single Product',
+	            'default'   =>  'yes'
+            ),
+            'products_icons'    =>  array(
+	            'title'     =>  'Enable/ Disable',
+	            'type'      =>  'checkbox',
+	            'label'     =>  'Enable Icons on Products',
+	            'default'   =>  'no'
+            ),
             'title' =>  array(
                 'title'         =>  'Title',
                 'type'          =>  'text',

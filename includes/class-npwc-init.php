@@ -111,7 +111,18 @@ class NPWC_Init {
     public function hooks() {
 
         add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 5 );
+        add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 
+    }
+
+    public function admin_enqueue_scripts() {
+        wp_enqueue_script(
+            'npwc-custom-scripts',
+            NPWC_PLUGIN_URL . 'assets/js/scripts.js',
+            array( 'jquery' ),
+            NPWC_VERSION,
+            true
+        );
     }
 
     /**
@@ -132,6 +143,11 @@ class NPWC_Init {
                 '<a href="%s" style="color: green; font-weight: bold" target="_blank">%s</a>',
                 esc_url( 'https://scintelligencia.com/products/nowpayments-for-woocommerce-pro/' ),
                 __( 'Go PRO' )
+            );
+            $plugin_meta[] = sprintf(
+                '<a href="%s" style="color: green; font-weight: bold" target="_blank">%s</a>',
+                esc_url( 'https://scintelligencia.com/products/nowpayments-for-woocommerce-pro/' ),
+                __( 'Demo PRO' )
             );
 
         }
