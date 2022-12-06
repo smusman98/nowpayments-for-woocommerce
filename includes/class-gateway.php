@@ -50,13 +50,13 @@ class NPWC_Gateway extends WC_Payment_Gateway {
             'single_product_icon'    =>  array(
 	            'title'     =>  'Enable/ Disable',
 	            'type'      =>  'checkbox',
-	            'label'     =>  'Enable Icons on Single Product',
-	            'default'   =>  'yes'
+	            'label'     =>  'Show Crypto Icons and Individual Pricing on Product Page (Pro)',
+	            'default'   =>  'no'
             ),
             'products_icons'    =>  array(
 	            'title'     =>  'Enable/ Disable',
 	            'type'      =>  'checkbox',
-	            'label'     =>  'Enable Icons on Products',
+	            'label'     =>  'Show Crypto Icons and Individual Pricing on Shop Page (Pro)',
 	            'default'   =>  'no'
             ),
             'title' =>  array(
