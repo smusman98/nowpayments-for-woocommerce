@@ -17,7 +17,7 @@ class NPWC_Gateway extends WC_Payment_Gateway {
         $this->method_title = 'NOWPayments';
         $this->description = $this->get_option( 'description' );
         $this->has_fields = false;
-        $this->method_description = 'Allows customer to checkout with 100+ crypto currencies.';
+        $this->method_description = 'Allows customer to checkout with 150+ crypto currencies.';
         $this->init_form_fields();
         $this->init_settings();
 

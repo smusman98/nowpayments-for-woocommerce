@@ -141,12 +141,12 @@ class NPWC_Init {
 
             $plugin_meta[] = sprintf(
                 '<a href="%s" style="color: green; font-weight: bold" target="_blank">%s</a>',
-                esc_url( 'https://scintelligencia.com/products/nowpayments-for-woocommerce-pro/' ),
+                esc_url( 'https://coderpress.co/products/nowpayments-for-woocommerce/' ),
                 __( 'Go PRO' )
             );
             $plugin_meta[] = sprintf(
                 '<a href="%s" style="color: green; font-weight: bold" target="_blank">%s</a>',
-                esc_url( 'https://scintelligencia.com/products/nowpayments-for-woocommerce-pro/' ),
+                esc_url( 'https://nowpayments.coderpress.co/shop/' ),
                 __( 'Demo PRO' )
             );
 
