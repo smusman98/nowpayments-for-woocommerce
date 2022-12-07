@@ -1,6 +1,6 @@
 === NOWPayments For WooCommerce ===
 Contributors: smusman98
-Donate link: https://scintelligencia.com/products/nowpayments-for-woocommerce-pro/
+Donate link: https://coderpress.co/products/nowpayments-for-woocommerce/
 Tags: nowpay, woocommerce, ecommerce, woo, commerce, bitcoin, ethereum, litecoin, bitcash, blockchain, crypto, cryptocurrency
 Requires at least: 4.9
 Tested up to: 6.0
@@ -32,7 +32,7 @@ Fully supported by the SCI Intelligencia team with features that are necessary t
 * Attractive User Interface
 * Easy Setup
 * Open for Suggestions
-* [Go Pro](https://scintelligencia.com/products/nowpayments-for-woocommerce-pro/)
+* [Go Pro](https://coderpress.co/products/nowpayments-for-woocommerce/)
 * [Live Demo](https://nowpayments.coderpress.co/shop/)
 
 
