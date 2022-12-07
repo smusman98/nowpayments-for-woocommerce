@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name: NOWPayments for WooCommerce
- * Plugin URI: https://www.scintelligencia.com/
+ * Plugin URI: https://coderpress.co/products/nowpayments-for-woocommerce/
  * Author: SCI Intelligencia
- * Description: Allow WooCommerce user to checkout with 100+ crypto currencies.
- * Version: 1.0.2
+ * Description: Allow WooCommerce user to checkout with 150+ crypto currencies.
+ * Version: 1.0.3
  * Author: Syed Muhammad Usman
  * Author URI: https://www.linkedin.com/in/syed-muhammad-usman/
  * License: GPL v2 or later
@@ -64,7 +64,7 @@ if ( ! defined( 'NPWC_PLUGIN_FILE' ) ) {
 }
 
 if ( ! defined( 'NPWC_VERSION' ) ) {
-    define( 'NPWC_VERSION', '1.0.2' );
+    define( 'NPWC_VERSION', '1.0.3' );
 }
 
 if ( ! defined( 'NPWC_PLUGIN_URL' ) ) {

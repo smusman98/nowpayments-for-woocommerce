@@ -4,7 +4,7 @@ Donate link: https://scintelligencia.com/products/nowpayments-for-woocommerce-pr
 Tags: nowpay, woocommerce, ecommerce, woo, commerce, bitcoin, ethereum, litecoin, bitcash, blockchain, crypto, cryptocurrency
 Requires at least: 4.9
 Tested up to: 6.0
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -18,7 +18,7 @@ Allow users to checkout with 150+ crypto currencies.
 NOWPayments for WooCommerce, It's very easy and simple to use with WooCommerce.
 Fully supported by the SCI Intelligencia team with features that are necessary to keep check.
 
-* Accept 100+ cryptocurrencies converted into the ones you trust.
+* Accept 150+ cryptocurrencies converted into the ones you trust.
 * Receive instant payouts to your wallet or bank account.
 * Enjoy 24/7 support and personal account manager.
 * Save on fees: cheapest on the crypto market.
