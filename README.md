@@ -1,48 +1,49 @@
 === NOWPayments For WooCommerce ===
-Contributors: smusman98
-Donate link: https://coderpress.co/products/nowpayments-for-woocommerce/
-Tags: nowpay, woocommerce, ecommerce, woo, commerce, bitcoin, ethereum, litecoin, bitcash, blockchain, crypto, cryptocurrency
+Contributors: CoderPress
+Donate link: https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=donate-link
+Tags: bitcoin, ethereum, litecoin, crypto, cryptocurrency
 Requires at least: 4.9
-Tested up to: 6.0
-Stable tag: 1.0.3
+Tested up to: 6.9
+Stable tag: 1.2.7
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Allow users to checkout with 150+ crypto currencies.
+Allow users to checkout with 300+ crypto currencies.
 
 == Description ==
 
-[Get Pro](https://coderpress.co/products/nowpayments-for-woocommerce/) | [Pro Live Demo](https://nowpayments.coderpress.co/shop/) | [Documentation](https://coderpress.co/docs/nowpayments-for-woocommerce/)
+[👑 Get Pro](https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=readme-get-pro) | [Pro Live Demo](https://nowpayments.coderpress.co/shop/) | [Documentation](https://coderpress.co/docs/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=readme-documentation)
 
-NOWPayments for WooCommerce, It's very easy and simple to use with WooCommerce.
-Fully supported by the SCI Intelligencia team with features that are necessary to keep check.
+https://youtu.be/-vz3n-UMyTY
 
-* Accept 150+ cryptocurrencies converted into the ones you trust.
+NOWPayments for WooCommerce, It's very easy crypto pluign and simple to use with WooCommerce, if you are logging for WooCommerce gateway that can accept lots of cryptocurrencies, NOWPayments is the right place.
+Fully supported by the [CoderPress](https://www.coderpress.co/) team with features that are necessary to keep check.
+
+* Accept 300+ cryptocurrencies converted into the ones you trust.
 * Receive instant payouts to your wallet or bank account.
 * Enjoy 24/7 support and personal account manager.
 * Save on fees: cheapest on the crypto market.
 * Feel the freedom of choice with our variety of tools.
 
-**Premium**
+**NOWPayments for WooCommerce Pro  [🏷️Pro]**
 
-* Top 5 Currency Icons on Products
-* Top 5 Currency Icons on Shop page
+* Crypto Currency Icons on Products
+* Crypto Currency Icons on Shop page
+* Ticker
+* Crypto Currency Card
+* Crypto Currency Pricing Tabl
+* Crypto Currency Grap
+* Crypto Currency Labe
+* Crypto Currency Tabl
 * Priority Support
 * Attractive User Interface
 * Easy Setup
 * Open for Suggestions
-* [Go Pro](https://coderpress.co/products/nowpayments-for-woocommerce/)
-* [Live Demo](https://nowpayments.coderpress.co/shop/)
-
-
-https://youtu.be/-vz3n-UMyTY
+* [Go Pro👑](https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=readme-go-pro)
 
 = Our other plugins =
-* [Coinbase Commerce for WooCommerce](https://wordpress.org/plugins/commerce-coinbase-for-woocommerce/)
-* [Coinbase Commerce for Contact Form 7](https://wordpress.org/plugins/coinbase-commerce-for-contact-form-7/)
-* [Posts and Products Views for WooCommerce](https://wordpress.org/plugins/posts-and-products-views/)
-* [Emails Blacklist for Everest Forms](https://wordpress.org/plugins/emails-blacklist-everest-forms/)
+* [Midnight Deals for WooCommerce](https://coderpress.co/products/midnight-deals-for-woocommerce/?utm_source=npwc&utm_medium=readme-midnight-deals-for-woocommerce)
 
 = Supported Coins =
 = Coin Name Popular Coins =
@@ -209,6 +210,49 @@ Contact: smusman98@gmail.com
 1. You're all ready to use NOWPayments
 
 == Changelog ==
+
+= 1.2.7 - Jul 26, 2025 =
+* Tweak ✨ - Removed Pro Screenshots.
+
+= 1.2.6 - Jul 12, 2025 =
+* Tweak ✨ - Added Pro Screenshots.
+
+= 1.2.5 - Mar 09, 2025 =
+* Tweak ✨ - UI Tweak.
+
+= 1.2.4 - Jan 28, 2025 =
+* Updated 🚀 - Updated SDK to latest version.
+
+= 1.2.3 - Jan 05, 2025 =
+* Updated 🚀 - Updated SDK to latest version.
+
+= 1.2.2 - Oct 25, 2024 =
+* Updated 🚀 - Updated SDK to latest version.
+* FIX 🪲 - IPN Callback was not checking whether it's an array or not.
+
+= 1.2.1 - Oct 02, 2024 =
+* Updated 🚀 - Updated SDK to latest version.
+
+= 1.2.0 - Sept 14, 2024 =
+* Updated 🚀 - Added PHP 8.x Support.
+
+= 1.1.3 - Sept 11, 2024 =
+* Updated 🚀 - Updated SDK to latest version.
+
+= 1.1.2 April 14, 2024 =
+* Updated 🚀 - URLs.
+
+= 1.1.1 March 23, 2024 =
+* TWEAK - Typo Fix 📃
+
+= 1.1 August 12, 2023 =
+* NEW - Added WooCommerce Block Support 
+
+= 1.0.5 July 20, 2023 =
+* Updated SDK
+
+= 1.0.4 June 14, 2023 =
+* FIX - Warning: Undefined array key “slug” (Thanks to [https://wordpress.org/support/users/eeeeeeehsan/](@eeeeeeehsan))
 
 = 1.0.1 Sept 01, 2022 =
 * URLs Added
