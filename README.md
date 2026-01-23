@@ -1,237 +1,163 @@
-=== NOWPayments For WooCommerce ===
+=== NOWPayments for WooCommerce – Crypto Payment Gateway ===
 Contributors: CoderPress
 Donate link: https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=donate-link
-Tags: bitcoin, ethereum, litecoin, crypto, cryptocurrency
+Tags: woocommerce crypto, cryptocurrency payments, bitcoin payment gateway, crypto checkout, ethereum
 Requires at least: 4.9
 Tested up to: 6.9
-Stable tag: 1.2.7
+Stable tag: 1.2.8
 Requires PHP: 5.2.4
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Allow users to checkout with 300+ crypto currencies.
+Accept Bitcoin, Ethereum, and 300+ cryptocurrencies in WooCommerce using the official NOWPayments crypto payment gateway.
 
 == Description ==
 
-[👑 Get Pro](https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=readme-get-pro) | [Pro Live Demo](https://nowpayments.coderpress.co/shop/) | [Documentation](https://coderpress.co/docs/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=readme-documentation)
+[👑 Upgrade to Pro](https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=readme-get-pro) | [Live Demo](https://nowpayments.coderpress.co/shop/) | [Documentation](https://coderpress.co/docs/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=readme-documentation)
 
-https://youtu.be/-vz3n-UMyTY
+https://youtu.be/-vz3n-UMyTY?si=klOK1vWTHygqwrha
 
-NOWPayments for WooCommerce, It's very easy crypto pluign and simple to use with WooCommerce, if you are logging for WooCommerce gateway that can accept lots of cryptocurrencies, NOWPayments is the right place.
-Fully supported by the [CoderPress](https://www.coderpress.co/) team with features that are necessary to keep check.
+**NOWPayments for WooCommerce** enables WordPress store owners to accept cryptocurrency payments securely and instantly using the NOWPayments platform.
 
-* Accept 300+ cryptocurrencies converted into the ones you trust.
-* Receive instant payouts to your wallet or bank account.
-* Enjoy 24/7 support and personal account manager.
-* Save on fees: cheapest on the crypto market.
-* Feel the freedom of choice with our variety of tools.
+If you are looking for a **WooCommerce crypto payment gateway** that supports hundreds of coins, real-time conversions, and automated payouts — this plugin delivers enterprise-grade crypto checkout functionality for WordPress.
 
-**NOWPayments for WooCommerce Pro  [🏷️Pro]**
+Developed and maintained by **CoderPress**, this plugin is built for reliability, scalability, and merchant usability.
 
-* Crypto Currency Icons on Products
-* Crypto Currency Icons on Shop page
-* Ticker
-* Crypto Currency Card
-* Crypto Currency Pricing Tabl
-* Crypto Currency Grap
-* Crypto Currency Labe
-* Crypto Currency Tabl
-* Priority Support
-* Attractive User Interface
-* Easy Setup
-* Open for Suggestions
-* [Go Pro👑](https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=readme-go-pro)
+### 🚀 Core Features
 
-= Our other plugins =
-* [Midnight Deals for WooCommerce](https://coderpress.co/products/midnight-deals-for-woocommerce/?utm_source=npwc&utm_medium=readme-midnight-deals-for-woocommerce)
+* Accept 300+ cryptocurrencies in WooCommerce
+* Automatic conversion to preferred settlement currency
+* Instant payouts to wallets or bank accounts
+* Secure API-based processing
+* Low transaction fees
+* Sandbox mode for testing
+* Professional merchant support
+* WooCommerce Blocks compatibility
+* Simple setup in minutes
 
-= Supported Coins =
-= Coin Name Popular Coins =
+---
+
+## 💎 Pro Version Features
+
+Upgrade to **NOWPayments for WooCommerce Pro** to unlock advanced crypto merchandising tools:
+
+* WooCommerce crypto subscriptions support
+* Cryptocurrency icons on product and shop pages
+* Live ticker widgets
+* Crypto pricing cards
+* Dynamic crypto price tables
+* Graph widgets
+* Multi-currency labels
+* Enhanced UI components
+* Priority support
+* Continuous feature updates
+
+👉 [Go Pro](https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=readme-go-pro)
+
+---
+
+## 🔌 Our Other WooCommerce Crypto Plugins
+
+* [Cryptomus for WooCommerce](https://coderpress.co/products/cryptomus-for-woocommerce/?utm_source=npwc&utm_medium=readme-cryptomus-for-woocommerce)
+
+---
+
+## 🪙 Supported Cryptocurrencies
+
+NOWPayments supports hundreds of assets including:
+
+### Popular Coins
 * Bitcoin (BTC)
 * Ethereum (ETH)
-* XRP(XRP)
-* Tether (USDT OMNI)
+* XRP
 * Litecoin (LTC)
-* Bitcoin Cash (BCH)
 * Dogecoin (DOGE)
-* Nano (XNO)
 * Monero (XMR)
-* DASH (DASH)
-* Vechain (VET)
-* Uniswap (UNI)
 * Solana (SOL)
 * Cardano (ADA)
+* Polygon (MATIC)
 
-= Stable Coins =
+### Stablecoins
+* USDT (ERC20 / TRC20)
+* USDC
+* DAI
 * TrueUSD (TUSD)
-* DAI (DAI)
-* Tether (USDTRC20)
 * Pax Dollar (USDP)
-* Tether (USDTERC20)
-* Binance USD (BUSD)
-* USD Coin (USDC)
 * Gemini Dollar (GUSD)
 
-= Other Coins & Tokens =
-* FTX Token (FTT)
-* Avalanche (AVAX)
-* FEG Token (FEG)
-* MX Token (MX)
-* LEASH (LEASH)
-* Zcash (ZEC)
-* Verge (XVG)
-* TRON (TRX)
-* DigiByte (DGB)
-* Horizen (ZEN)
-* Axie Infinity (AXS)
-* FunFair (FUN)
-* GAS (GAS)
-* Groestlcoin (GRS)
-* Coin98 (C98)
-* Kishu Inu (KISHU)
-* Cosmos (ATOM)
-* Shopping (SPI)
-* GSPI Shopping.io Governance (GSPI)
-* RXCGames (RXCG)
-* Bitcoin SV (BSV)
-* Baby Doge Coin (BABYDOGE)
-* Kyber Network (KNC)
-* Bitcoin Gold (BTG)
-* BinanceCoin (BNBBSC)
-* BNBMainnet (BNBMAINNET)
-* Stellar (XLM)
-* Waves (WAVES)
-* NEO (NEO)
-* Firo (FIRO)
-* Bitcoin Diamond (BCD)
-* Decred (DCR)
-* Tael (WABI)
-* MCO (MCO)
-* QTUM (QTUM)
-* Huobi Token (HT)
-* Basic Attention Token (BAT)
-* Komodo (KMD)
-* BEAM (BEAM)
-* EOS (EOS)
-* Ravencoin (RVN)
-* Ethereum Classic (ETC)
-* Toko Token (TKO)
-* Floki Inu (FLOKI)
-* OMG (OMG)
-* CHZ (CHZ)
-* US Dollar (USD)
-* NEM (XEM)
-* TerraUSD (UST)
-* Hedera Hashgraph (HBAR)
-* Aeternity (AE)
-* Crypto.com Coin (CRO)
-* Gatechain Token (GT)
-* Standard Tokenization Protocol (STPT)
-* Swipe (SXP)
-* Travala (AVA)
-* XYO (XYO)
-* ARPA Chain (ARPA)
-* Bella Protocol (BEL)
-* Travala (AVABSC)
-* XDC Network (XDC)
-* Fluffy Coin (FLUF)
-* BLOCKS (BLOCKS)
-* UnMarshal (MARSH)
-* NFTb (NFTB)
-* AVNRich Token (AVN)
-* NEAR Protocol (NEAR)
-* Travala (AVAERC20)
-* Lisk (LSK)
-* OKB (OKB)
-* Chainlink (LINK)
-* Tezos (XTZ)
-* Filecoin (FILMAINNET)
-* Ark (ARK)
-* Zilliqa (ZIL)
-* Enjin (ENJ)
-* Algorand (ALGO)
-* Ontology (ONT)
-* Augur (REP)
-* Pundi X (NPXS)
-* Coti (COTI)
-* Ocean Protocol (OCEAN)
-* Yearn.finance (YFI)
-* Theta Fuel (TFUEL)
-* Polkadot (DOT)
-* Terra (LUNA)
-* DAO Maker (DAO)
-* Symbol (XYM)
-* Chromia (CHR)
-* Decentraland (MANA)
-* LGCY Network (LGCY)
-* Frontier (FRONT)
-* Fantom (FTM)
-* Elrond (EGLD)
-* ICON (ICX)
-* Stratis (STRAX)
-* Polygon (MATIC)
-* Polygon (MATICMAINNET)
-* Cartesi (CTSI)
-* Harmony (ONE)
-* The Sandbox (SAND)
-* ChangeNOW (NOW)
-* MANTRA DAO (OM)
-* Klever (KLV)
-* Secret (SCRT)
-* SparkPoint (SRK)
-* Viberate (VIB)
-* SuperFarm (SUPER)
-* Hoge Finance (HOGE)
-* Newscrypto coin (NWC)
-* PancakeSwap (CAKE)
-* IoTeX (IOTX)
-* IOTA (MIOTA)
-* Holo (HOT)
-* Theta Network (THETA)
-* Keanu Inu (KEANU)
-* Dtravel (TRVL)
-* Poodl Token (POODL)
-* Radio Caca (RACA)
-* Bitgert (BRISE)
-* Klaytn (KLAY)
-* Centric Swap (CNS)
-* Pitbull (PIT)
+### Hundreds of Additional Tokens
+FTT, AVAX, LINK, DOT, CAKE, ATOM, TRX, EOS, ETC, ZIL, FIL, ALGO, HBAR, CRO, FTM, EGLD, NEAR, AXS, MANA, SAND, UNI, BNB, XLM, and many more.
 
+> Full supported coin list is automatically synced from NOWPayments.
 
-We're open to suggestions. 
-Contact: smusman98@gmail.com
+---
 
-== Screenshots ==
+## 📸 Screenshots
 
-1. Goto WooCommerce > Settings > Payments
-1. Goto https://account.nowpayments.io/store-settings for  SandBox https://account-sandbox.nowpayments.io/store-settings
-1. Goto https://account.nowpayments.io/store-settings for SandBox IPN https://account-sandbox.nowpayments.io/store-settings
-1. Copy API and IPN Secret and paste, save.
-1. You're all ready to use NOWPayments
+1. WooCommerce → Settings → Payments
+2. Configure API keys from NOWPayments Dashboard
+3. Sandbox account setup
+4. Payment method visible at checkout
+5. Successful crypto order screen
+
+---
+
+## 📬 Support & Feedback
+
+We welcome suggestions and feature requests.
+
+Contact: support@coderpress.co
+
+== Frequently Asked Questions ==
+
+= What is NOWPayments for WooCommerce? =
+
+NOWPayments for WooCommerce is a cryptocurrency payment gateway plugin developed by CoderPress that allows WooCommerce stores to accept Bitcoin, Ethereum, USDT, and 300+ digital currencies at checkout.
+
+You can learn more about the plugin here: [NOWPayments for WooCommerce](https://coderpress.co/products/nowpayments-for-woocommerce/)
+
+---
+
+= How do I accept crypto payments in WooCommerce? =
+
+Install the NOWPayments plugin from WordPress.org, connect your API keys from NOWPayments, enable the payment gateway inside WooCommerce settings, and start accepting cryptocurrency payments.
+
+Full setup details are available at: [How to accept crypto payments in WooCommerce](https://coderpress.co/docs/nowpayments-for-woocommerce/)
+
+---
+
+= Which cryptocurrencies are supported? =
+
+The plugin supports more than 300+ assets including BTC, ETH, USDT, USDC, SOL, ADA, MATIC, DOGE, XRP, and many popular altcoins.
+
+A complete feature overview is available here: [NOWPayments supported coins](https://nowpayments.io/supported-coins)
+
+---
+
+= Does the plugin work with WooCommerce Blocks checkout? =
+
+Yes. NOWPayments for WooCommerce is fully compatible with WooCommerce Blocks and the modern checkout experience.
+
+Compatibility details: [NOWPayments for WooCommerce Compatibility](https://coderpress.co/products/nowpayments-for-woocommerce/)
+
+---
 
 == Changelog ==
 
-= 1.2.7 - Jul 26, 2025 =
-* Tweak ✨ - Removed Pro Screenshots.
+= 1.2.8 – Jan 23, 2026 =
+* Updated SDK to latest version.
 
-= 1.2.6 - Jul 12, 2025 =
-* Tweak ✨ - Added Pro Screenshots.
+= 1.2.7 – Jul 26, 2025 =
+* Removed Pro screenshots.
 
-= 1.2.5 - Mar 09, 2025 =
-* Tweak ✨ - UI Tweak.
+= 1.2.6 – Jul 12, 2025 =
+* Added Pro screenshots.
 
-= 1.2.4 - Jan 28, 2025 =
-* Updated 🚀 - Updated SDK to latest version.
+= 1.2.5 – Mar 09, 2025 =
+* UI improvements.
 
-= 1.2.3 - Jan 05, 2025 =
-* Updated 🚀 - Updated SDK to latest version.
-
-= 1.2.2 - Oct 25, 2024 =
-* Updated 🚀 - Updated SDK to latest version.
-* FIX 🪲 - IPN Callback was not checking whether it's an array or not.
-
-= 1.2.1 - Oct 02, 2024 =
-* Updated 🚀 - Updated SDK to latest version.
+= 1.2.4 – Jan 28, 2025 =
+* Updated SDK.
 
 = 1.2.0 - Sept 14, 2024 =
 * Updated 🚀 - Added PHP 8.x Support.
