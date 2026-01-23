@@ -5,6 +5,12 @@
 
             window.open( 'https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=settings-pro-checkbox', '_blank' )
         } );
+
+        $( '#woocommerce_nowpayments_subscription' ).on( 'click', function( e ) {
+            e.preventDefault();
+
+            window.open( 'https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=settings-subscription', '_blank' )
+        } );
     } );
 
     // How to setup

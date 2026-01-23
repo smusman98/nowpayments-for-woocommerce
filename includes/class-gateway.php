@@ -59,6 +59,12 @@ class NPWC_Gateway extends WC_Payment_Gateway {
 	            'label'     =>  'Show Crypto Icons and Individual Pricing on Shop Page (Pro)',
 	            'default'   =>  'no'
             ),
+            'subscription'    =>  array(
+	            'title'     =>  'Enable/ Disable',
+	            'type'      =>  'checkbox',
+	            'label'     =>  'Enable/ Disable Subscription with WooCommerce Subscription (Pro)',
+	            'default'   =>  'no'
+            ),
             'title' =>  array(
                 'title'         =>  'Title',
                 'type'          =>  'text',

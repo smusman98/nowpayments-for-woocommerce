@@ -4,13 +4,11 @@
  * Plugin URI: https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=plugin-uri
  * Author: CoderPress
  * Description: Allow WooCommerce user to checkout with 300+ crypto currencies.
- * Version: 1.2.7
- * Author: Syed Muhammad Usman
+ * Version: 1.2.8
+ * Author: CoderPress
  * Author URI: https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=author-uri
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * @author Syed Muhammad Usman
- * @url https://www.linkedin.com/in/syed-muhammad-usman/
  */
 
 
