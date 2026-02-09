@@ -1,12 +1,17 @@
 <?php
+/**
+ * NowPayments WooCommerce Blocks payment method type.
+ *
+ * @package NowPayments_For_WooCommerce
+ * @since 1.0
+ */
+
 defined( 'ABSPATH' ) || exit;
 
 use Automattic\WooCommerce\Blocks\Payments\Integrations\AbstractPaymentMethodType;
 
 /**
- * NowPayments Blocks integration
- *
- * @since 1.0
+ * NOWPayments gateway block for WooCommerce Blocks checkout.
  */
 final class NowPaymentsGatewayBlock extends AbstractPaymentMethodType {
 
@@ -28,7 +33,7 @@ final class NowPaymentsGatewayBlock extends AbstractPaymentMethodType {
 	 * Initializes the payment method type.
 	 */
 	public function initialize() {
-		$this->settings = get_option( 'woocommerce_nowpayments_settings', [] );
+		$this->settings = get_option( 'woocommerce_nowpayments_settings', array() );
 		$this->gateway  = new NPWC_Gateway();
 	}
 
@@ -49,24 +54,24 @@ final class NowPaymentsGatewayBlock extends AbstractPaymentMethodType {
 	public function get_payment_method_script_handles() {
 
 		$script_path       = '/assets/blocks/frontend/blocks.js';
-		$script_asset_path = NPWC_PLUGIN_DIR_PATH . '/assets/blocks/frontend/blocks.asset.php';
+		$script_asset_path = NPWC_PLUGIN_DIR_PATH . '/assets/blocks/frontend/blocks-asset.php';
 		$script_asset      = file_exists( $script_asset_path )
-			? require( $script_asset_path )
+			? require $script_asset_path
 			: array(
 				'dependencies' => array(),
-				'version'      => NPWC_VERSION
+				'version'      => NPWC_VERSION,
 			);
 		$script_url        = NPWC_PLUGIN_URL . $script_path;
 
 		wp_register_script(
 			'npwc-checkout-block',
 			$script_url,
-			$script_asset[ 'dependencies' ],
-			$script_asset[ 'version' ],
+			$script_asset['dependencies'],
+			$script_asset['version'],
 			true
 		);
 
-		return [ 'npwc-checkout-block' ];
+		return array( 'npwc-checkout-block' );
 	}
 
 	/**
@@ -75,10 +80,10 @@ final class NowPaymentsGatewayBlock extends AbstractPaymentMethodType {
 	 * @return array
 	 */
 	public function get_payment_method_data() {
-		return [
+		return array(
 			'title'       => $this->get_setting( 'title' ),
 			'description' => $this->get_setting( 'description' ),
-			'supports'    => array_filter( $this->gateway->supports, [ $this->gateway, 'supports' ] )
-		];
+			'supports'    => array_filter( $this->gateway->supports, array( $this->gateway, 'supports' ) ),
+		);
 	}
 }

@@ -1,43 +1,39 @@
 <?php
 /**
- * Class API
+ * NOWPayments off-page checkout API helper.
  *
- * @package NOWPayments For WooCommerce
+ * @package NowPayments_For_WooCommerce
  */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Class NPEC_API
+ * Builds NOWPayments off-page checkout URLs.
  */
 class NPEC_API {
 
 	/**
-	 * Is Live or Sandbox
+	 * Is Live or Sandbox.
 	 *
-	 * @var string $is_live
-	 *
+	 * @var bool
 	 * @since 1.0
 	 * @version 1.0
 	 */
 	private $is_live;
 
-
 	/**
-	 * Endpoint
+	 * API endpoint base URL.
 	 *
-	 * @var string $endpoint
+	 * @var string
 	 * @since 1.0
 	 * @version 1.0
 	 */
 	public $endpoint;
 
-
 	/**
-	 * API key
+	 * API key.
 	 *
-	 * @var string $api_key
-	 *
+	 * @var string
 	 * @since 1.0
 	 * @version 1.0
 	 */
@@ -46,42 +42,37 @@ class NPEC_API {
 	/**
 	 * NPEC_API constructor.
 	 *
-	 * @param bool   $is_live checking is live.
-	 * @param string $api_key Api key.
-	 *
+	 * @param string $api_key API key.
+	 * @param bool   $is_live True for live, false for sandbox.
 	 * @since 1.0
 	 * @version 1.0
 	 */
-	public function __construct( $is_live = true, $api_key = '' ) {
+	public function __construct( $api_key, $is_live = true ) {
 
 		$this->is_live = $is_live;
 		$this->api_key = $api_key;
 
 		if ( $is_live ) {
-			$this->endpoint = 'https://api.nowpayments.io/v1';
 			$this->endpoint = 'https://nowpayments.io';
 		} else {
-			$this->endpoint = 'https://api-sandbox.nowpayments.io/v1';
 			$this->endpoint = 'https://sandbox.nowpayments.io';
 		}
 	}
 
 	/**
-	 * Ready the url to process off-page checkout
+	 * Build URL for off-page checkout.
 	 *
-	 * @param array $parameters Off page checkout parameters.
-	 * @return string
-	 * @version 1.0
+	 * @param array $parameters Checkout parameters.
+	 * @return string Redirect URL.
 	 * @since 1.0
+	 * @version 1.0
 	 */
 	public function off_page_checkout( $parameters = array() ) {
 
 		$parameters['apiKey'] = $this->api_key;
-		$parameters           = rawurlencode( wp_json_encode( $parameters ) );
-		$redirect_url         = "{$this->endpoint}/payment?data={$parameters}";
+		$encoded              = rawurlencode( wp_json_encode( $parameters ) );
+		$redirect_url         = "{$this->endpoint}/payment?data={$encoded}";
 
 		return $redirect_url;
 	}
-
-
 }

@@ -1,5 +1,15 @@
 <?php
+/**
+ * NOWPayments WooCommerce gateway.
+ *
+ * @package NowPayments_For_WooCommerce
+ */
 
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * NOWPayments payment gateway for WooCommerce.
+ */
 class NPWC_Gateway extends WC_Payment_Gateway {
 
 	/**
@@ -130,11 +140,13 @@ class NPWC_Gateway extends WC_Payment_Gateway {
 
 		parent::process_admin_options();
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies nonce for payment gateway settings.
 		if ( empty( $_POST['woocommerce_nowpayments_live_api_key'] ) ) {
 			WC_Admin_Settings::add_error( 'Error: Live API Key is required.' );
 			return false;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies nonce for payment gateway settings.
 		if ( isset( $_POST['woocommerce_nowpayments_sandbox'] ) && empty( $_POST['woocommerce_nowpayments_sandbox_api_key'] ) ) {
 			WC_Admin_Settings::add_error( 'Error: SandBox API Key is required.' );
 			return false;
@@ -142,17 +154,17 @@ class NPWC_Gateway extends WC_Payment_Gateway {
 	}
 
 	/**
-	 * Let's Process the Payment xD
+	 * Process the payment and redirect to NOWPayments.
 	 *
-	 * @param int $order_id
-	 * @return array|void
+	 * @param int $order_id WooCommerce order ID.
+	 * @return array|void Redirect data or void on failure.
 	 * @since 1.0
 	 * @version 1.0
 	 */
 	public function process_payment( $order_id ) {
 
 		$order   = wc_get_order( $order_id );
-		$is_live = ( ! empty( $this->get_option( 'sandbox' ) ) && $this->get_option( 'sandbox' ) == 'yes' ) ? false : true;
+		$is_live = ( ! empty( $this->get_option( 'sandbox' ) ) && 'yes' === $this->get_option( 'sandbox' ) ) ? false : true;
 		$api_key = '';
 
 		if ( $is_live ) {
@@ -165,12 +177,12 @@ class NPWC_Gateway extends WC_Payment_Gateway {
 	}
 
 	/**
-	 * Off-Site checkout
+	 * Off-site checkout: build redirect URL for NOWPayments.
 	 *
-	 * @param $is_live
-	 * @param $api_key
-	 * @param $order
-	 * @return array
+	 * @param bool     $is_live True for live, false for sandbox.
+	 * @param string   $api_key API key.
+	 * @param WC_Order $order   Order object.
+	 * @return array Result with redirect URL.
 	 * @since 1.0
 	 * @version 1.0
 	 */
@@ -293,20 +305,3 @@ class NPWC_Gateway extends WC_Payment_Gateway {
 		return $data;
 	}
 }
-
-/**
- * Adds Gateway into WooCommerce
- *
- * @param $gateways
- * @return mixed
- * @since 1.0
- * @version 1.0
- */
-if ( ! function_exists( 'add_nowpayments_to_wc' ) ) :
-	function add_nowpayments_to_wc( $gateways ) {
-		$gateways[] = 'NPWC_Gateway';
-		return $gateways;
-	}
-endif;
-
-add_filter( 'woocommerce_payment_gateways', 'add_nowpayments_to_wc' );
