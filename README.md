@@ -144,10 +144,9 @@ Compatibility details: [NOWPayments for WooCommerce Compatibility](https://coder
 
 == Changelog ==
 
-= 1.2.9 – Feb 2026 =
-* Security – Webhook payments are now verified with a secret key so fake callbacks cannot mark orders as paid.
-* Code quality – Plugin code updated to follow WordPress coding standards for better security and maintainability.
-* Cleanup – Removed unused files and improved plugin structure.
+= 1.2.9 – Feb 25, 2026 =
+* IMPROVEMENT - Enhanced Security.
+* IMPROVEMENT - Code Optimization.
 
 = 1.2.8 – Jan 23, 2026 =
 * Updated SDK to latest version.
