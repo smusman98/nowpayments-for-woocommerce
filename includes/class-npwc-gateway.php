@@ -59,20 +59,29 @@ class NPWC_Gateway extends WC_Payment_Gateway {
 			'single_product_icon' => array(
 				'title'   => 'Enable/ Disable',
 				'type'    => 'checkbox',
-				'label'   => 'Show Crypto Icons and Individual Pricing on Product Page (Pro)',
+				'label'   => 'Show Crypto Icons and Individual Pricing on Product Page <span class="npwc-pro-badge">PRO</span>',
 				'default' => 'no',
+				'custom_attributes' => array(
+					'disabled' => 'disabled',
+				),
 			),
 			'products_icons'      => array(
 				'title'   => 'Enable/ Disable',
 				'type'    => 'checkbox',
-				'label'   => 'Show Crypto Icons and Individual Pricing on Shop Page (Pro)',
+				'label'   => 'Show Crypto Icons and Individual Pricing on Shop Page <span class="npwc-pro-badge">PRO</span>',
 				'default' => 'no',
+				'custom_attributes' => array(
+					'disabled' => 'disabled',
+				),
 			),
 			'subscription'        => array(
 				'title'   => 'Enable/ Disable',
 				'type'    => 'checkbox',
-				'label'   => 'Enable/ Disable Subscription with WooCommerce Subscription (Pro)',
+				'label'   => 'Enable/ Disable Subscription with WooCommerce Subscription <span class="npwc-pro-badge">PRO</span>',
 				'default' => 'no',
+				'custom_attributes' => array(
+					'disabled' => 'disabled',
+				),
 			),
 			'title'               => array(
 				'title'       => 'Title',
@@ -247,10 +256,31 @@ class NPWC_Gateway extends WC_Payment_Gateway {
 				status_header( 401 );
 				wp_die( 'Invalid signature', 'Unauthorized', array( 'response' => 401 ) );
 			}
-			$received   = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_NOWPAYMENTS_SIG'] ) );
-			$sorted     = $this->npwc_sort_array_recursive( $request );
-			$calculated = hash_hmac( 'sha512', wp_json_encode( $sorted, JSON_UNESCAPED_SLASHES ), trim( $ipn_secret ) );
-			if ( ! hash_equals( $calculated, $received ) ) {
+			$received = strtolower( sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_NOWPAYMENTS_SIG'] ) ) );
+			$sorted   = $this->npwc_sort_array_recursive( $request );
+			$secret   = trim( $ipn_secret );
+
+			// Accept common, equivalent payload serialization variants used by senders/tools.
+			$payload_variants = array_filter(
+				array(
+					$raw,
+					wp_json_encode( $sorted ),
+					wp_json_encode( $sorted, JSON_UNESCAPED_SLASHES ),
+					wp_json_encode( $sorted, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ),
+					json_encode( $sorted ),
+				)
+			);
+
+			$is_valid_signature = false;
+			foreach ( $payload_variants as $payload ) {
+				$calculated = strtolower( hash_hmac( 'sha512', $payload, $secret ) );
+				if ( hash_equals( $calculated, $received ) ) {
+					$is_valid_signature = true;
+					break;
+				}
+			}
+
+			if ( ! $is_valid_signature ) {
 				status_header( 401 );
 				wp_die( 'Invalid signature', 'Unauthorized', array( 'response' => 401 ) );
 			}

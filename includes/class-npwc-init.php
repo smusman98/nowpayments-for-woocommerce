@@ -118,6 +118,7 @@ class NPWC_Init {
 	public function hooks() {
 
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 5 );
+		add_filter( 'plugin_action_links_' . plugin_basename( NPWC_PLUGIN_FILE ), array( $this, 'plugin_action_links' ), 10, 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 
 		$is_hidden_notice = get_option( 'npwc_hide_save_cart_notice' );
@@ -203,6 +204,13 @@ class NPWC_Init {
 				'images' => NPWC_PLUGIN_URL . 'assets/images/',
 			)
 		);
+
+		wp_enqueue_style(
+			'npwc-admin',
+			NPWC_PLUGIN_URL . 'assets/css/admin.css',
+			array(),
+			NPWC_VERSION
+		);
 	}
 
 	/**
@@ -219,22 +227,36 @@ class NPWC_Init {
 	public function plugin_row_meta( $plugin_meta, $plugin_file, $plugin_data, $status ) {
 
 		unset( $status ); // Filter signature; not used.
-		if ( isset( $plugin_data['slug'] ) && 'nowpayments-for-woocommerce' === $plugin_data['slug'] ) {
+		if ( strpos( $plugin_file, basename( NPWC_PLUGIN_FILE ) ) !== false ) {
 
 			$plugin_meta[] = sprintf(
-				'<a href="%s" style="color: green; font-weight: bold" target="_blank">%s</a>',
-				esc_url( 'https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=plugins-go-pro' ),
-				__( 'GO PRO🚀' )
-			);
-			$plugin_meta[] = sprintf(
-				'<a href="%s" target="_blank">%s</a>',
+				'<a href="%s" style="color: blue; font-weight: bold; font-family: Poppins, sans-serif;" target="_blank">%s</a>',
 				esc_url( 'https://nowpayments.coderpress.co/shop/' ),
-				__( 'Demo PRO' )
+				esc_html__( 'Demo PRO 🚀', 'nowpayments-for-woocommerce' )
 			);
 
 		}
 
 		return $plugin_meta;
+	}
+
+	/**
+	 * Adds action link under plugin name in plugins list.
+	 *
+	 * @param array $links Existing action links.
+	 * @return array
+	 */
+	public function plugin_action_links( $links ) {
+
+		$upgrade_link = sprintf(
+			'<a href="%s" style="color: green; font-weight: bold; font-family: Poppins, sans-serif;" target="_blank">%s</a>',
+			esc_url( 'https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=plugin-npwc&utm_medium=plugins-page&utm_campaign=upgrade-to-pro' ),
+			esc_html__( 'Upgrade to Pro', 'nowpayments-for-woocommerce' )
+		);
+
+		array_unshift( $links, $upgrade_link );
+
+		return $links;
 	}
 
 	/**

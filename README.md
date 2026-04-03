@@ -4,7 +4,7 @@ Donate link: https://coderpress.co/products/nowpayments-for-woocommerce/?utm_sou
 Tags: woocommerce crypto, cryptocurrency payments, bitcoin payment gateway, crypto checkout, ethereum
 Requires at least: 4.9
 Tested up to: 6.9
-Stable tag: 1.2.9
+Stable tag: 1.3.0
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -143,6 +143,10 @@ Compatibility details: [NOWPayments for WooCommerce Compatibility](https://coder
 ---
 
 == Changelog ==
+
+= 1.3.0 – April 10, 2026 =
+* Updated SDK to latest version.
+* UI improvements.
 
 = 1.2.9 – Feb 25, 2026 =
 * IMPROVEMENT - Enhanced Security.
