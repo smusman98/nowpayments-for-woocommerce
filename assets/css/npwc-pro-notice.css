@@ -426,7 +426,6 @@
 .npwc-coupon-code-btn:hover {
     background: #5a9aff;
     border-color: #ffffff;
-    transform: translate3d(0, -2px, 0);
     box-shadow: 0 5px 18px rgba(79, 140, 255, 0.45);
 }
 
@@ -540,7 +539,6 @@
 }
 
 .npwc-pro-notice-button:hover {
-    transform: translate3d(0, -2px, 0);
     box-shadow: 0 6px 20px rgba(108, 93, 211, 0.3), 0 2px 6px rgba(0, 0, 0, 0.15);
     color: #5A4CB4 !important;
 }

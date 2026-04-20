@@ -22,23 +22,43 @@
 
 .npwc-settings-grid {
     display: flex;
+    flex-wrap: wrap;
     gap: 30px;
     align-items: flex-start;
     overflow: visible;
 }
 
 .npwc-settings-main {
-    flex: 1 1 0;
+    flex: 1 1 420px;
+    min-width: 0;
 }
 
 .npwc-sidebar {
+    flex: 0 0 auto;
     width: 340px;
+    max-width: 100%;
     position: sticky;
     top: 115px;
     align-self: flex-start;
-    max-height: calc(100vh - 135px);
-    overflow-y: auto;
-    overflow-x: visible;
+}
+
+@media screen and (max-width: 1320px) {
+    .npwc-settings-grid {
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .npwc-settings-main {
+        flex: none;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .npwc-sidebar {
+        width: 100%;
+        position: static;
+        top: auto;
+    }
 }
 
 .npwc-sidebar .npwc-card {
