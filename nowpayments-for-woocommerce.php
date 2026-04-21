@@ -1,6 +1,7 @@
 <?php
 /**
  * Plugin Name: NOWPayments for WooCommerce
+ * Requires Plugins: woocommerce
  * Plugin URI: https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=plugin-uri
  * Author: CoderPress
  * Description: Allow WooCommerce user to checkout with 300+ crypto currencies.
