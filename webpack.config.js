@@ -29,6 +29,7 @@ module.exports = {
 	...defaultConfig,
 	entry: {
 		'frontend/blocks': '/resources/js/frontend/index.js',
+		'admin/dashboard': '/src/dashboard/index.js',
 	},
 	output: {
 		path: path.resolve( __dirname, 'assets/blocks' ),

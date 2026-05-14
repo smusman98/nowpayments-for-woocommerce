@@ -2,7 +2,9 @@ jQuery(document).ready(
     function ( $ ) {
         'use strict';
 
-        // Dismiss notice and persist for this user.
+        /* 
+        * Dismiss notice and persist for this user.
+        */
         $(document).on(
             'click', '.npwc-pro-conversion-notice .notice-dismiss', function ( e ) {
                 e.preventDefault();
@@ -31,7 +33,9 @@ jQuery(document).ready(
             } 
         );
 
-        // Copy coupon code button.
+        /* 
+        * Copy coupon code button.
+        */
         $(document).on(
             'click', '.npwc-coupon-code-btn', function ( e ) {
                 e.preventDefault();
@@ -55,4 +59,3 @@ jQuery(document).ready(
         );
     } 
 );
-

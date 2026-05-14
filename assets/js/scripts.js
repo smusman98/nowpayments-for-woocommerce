@@ -7,11 +7,15 @@
             return proBaseUrl + '&utm_content=' + encodeURIComponent( sourceKey || 'general_modal' );
         }
 
-        // Force pro-only checkboxes to stay unchecked in free version UI.
+        /* 
+        * Force pro-only checkboxes to stay unchecked in free version UI.
+        */
         $( '#woocommerce_nowpayments_single_product_icon, #woocommerce_nowpayments_products_icons, #woocommerce_nowpayments_subscription' )
             .prop( 'checked', false );
 
-        // Add popup once for pro-feature clicks.
+        /* 
+        * Add popup once for pro-feature clicks.
+        */
         if ( ! $( '#npwc-pro-popup-overlay' ).length ) {
             $( 'body' ).append(
                 `<div id="npwc-pro-popup-overlay" class="npwc-pro-popup-overlay" style="display:none;">
@@ -81,7 +85,9 @@
             $( 'body' ).removeClass( 'npwc-no-scroll' );
         }
 
-        // Clicking pro rows or badges opens popup.
+        /* 
+        * Clicking pro rows or badges opens popup.
+        */
         $( document ).on( 'click', '.npwc-pro-trigger-row, .npwc-pro-badge', function( e ) {
             if ( $( e.target ).closest( 'a' ).length ) {
                 return;
@@ -92,7 +98,9 @@
             openProPopup( sourceKey );
         } );
 
-        // Keep checkboxes unchecked and open popup on direct click.
+        /* 
+        * Keep checkboxes unchecked and open popup on direct click.
+        */
         $( '#woocommerce_nowpayments_single_product_icon, #woocommerce_nowpayments_products_icons, #woocommerce_nowpayments_subscription' )
             .on( 'click', function( e ) {
                 e.preventDefault();
@@ -114,7 +122,9 @@
         } );
     } );
 
-    // How to setup
+    /* 
+    * How to setup
+    */
     var targetRow = jQuery( 'input#woocommerce_nowpayments_enabled' ).closest( 'tr' );
     var newRow = jQuery( 
         `<tr valign="top">
@@ -129,7 +139,9 @@
         </tr>` );
     targetRow.after( newRow );
 
-    // Pro Product Page
+    /* 
+    * Pro Product Page
+    */
     var targetRow = jQuery( 'input#woocommerce_nowpayments_single_product_icon' ).closest( 'tr' );
     var newRow = jQuery( 
         `<tr valign="top">
@@ -144,7 +156,9 @@
         </tr>` );
     targetRow.after( newRow );
 
-    // Pro Product Icons
+    /* 
+    * Pro Product Icons
+    */
     var targetRow = jQuery( 'input#woocommerce_nowpayments_products_icons' ).closest( 'tr' );
     var newRow = jQuery( 
         `<tr valign="top">
@@ -159,7 +173,9 @@
         </tr>` );
     targetRow.after( newRow );
 
-    // Pro Demo
+    /* 
+    * Pro Demo
+    */
     var targetRow = jQuery( 'input#woocommerce_nowpayments_webhook_url' ).closest( 'tr' );
     var newRow = jQuery( 
         `<tr valign="top">
@@ -174,7 +190,9 @@
         </tr>` );
     targetRow.after( newRow );
 
-    // Sidebar layout (Unlock Pro Features + Help).
+    /* 
+    * Sidebar layout (Unlock Pro Features + Help).
+    */
     var $settingsTable = jQuery( 'table.form-table' );
     if ( $settingsTable.length && jQuery( 'input#woocommerce_nowpayments_enabled' ).length ) {
         $settingsTable.wrap( '<div class="npwc-settings-grid"><div class="npwc-settings-main"></div></div>' );

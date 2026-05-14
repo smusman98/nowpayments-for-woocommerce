@@ -52,7 +52,6 @@ class NPEC_API {
             $this->endpoint = 'https://api-sandbox.nowpayments.io/v1';
             $this->endpoint = 'https://sandbox.nowpayments.io';
         }
-
     }
 
     /**
@@ -72,6 +71,4 @@ class NPEC_API {
         return $redirect_url;
 
     }
-
-
 }

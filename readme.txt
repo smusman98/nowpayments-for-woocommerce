@@ -145,8 +145,12 @@ Compatibility details: [NOWPayments for WooCommerce Compatibility](https://coder
 == Changelog ==
 
 = 1.4.0 – May 13, 2026 =
-* Tweak ✨ - Admin NOWPayments Dashboard.
-* Tweak ✨ - Dashboard dark mode: Revenue and Recent Transactions status `<select>` fields match the currency combobox styling (overrides WP admin core-ui on the dashboard screen).
+* Dashboard: light/dark appearance with per-user saved preference (REST + user meta).
+* Dashboard: Pro upgrade modal matches payment-settings popup styling; feature highlights; dark-styled modal when the dashboard theme is dark.
+* Dashboard: revenue chart buckets use the site timezone so daily totals match orders.
+* Dashboard: equal-width summary metric cards; header and NOWPayment branding tweaks.
+* Admin: "Get Pro Now" opens the upgrade URL in a new tab; `wp_safe_redirect` allows the external CoderPress host.
+* Developer: `npm run build` sets `NODE_OPTIONS=--openssl-legacy-provider` for Node 17+ with Webpack 4.
 
 = 1.3.0 – April 10, 2026 =
 * Updated SDK to latest version.

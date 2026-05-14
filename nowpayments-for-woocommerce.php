@@ -5,7 +5,7 @@
  * Plugin URI: https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=plugin-uri
  * Author: CoderPress
  * Description: Allow WooCommerce user to checkout with 300+ crypto currencies.
- * Version: 1.3.0
+ * Version: 1.4.0
  * Author: CoderPress
  * Author URI: https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=author-uri
  * License: GPL v2 or later
@@ -42,7 +42,7 @@ if ( ! function_exists( 'nfw_fs' ) ) {
 					'has_addons'     => false,
 					'has_paid_plans' => false,
 					'menu'           => array(
-						'first-path' => 'admin.php?page=wc-settings&tab=checkout&section=nowpayments&from=WCADMIN_PAYMENT_SETTINGS',
+						'first-path' => 'admin.php?page=npwc-dashboard',
 						'account'    => false,
 						'contact'    => false,
 						'support'    => false,
@@ -65,7 +65,7 @@ if ( ! defined( 'NPWC_PLUGIN_FILE' ) ) {
 }
 
 if ( ! defined( 'NPWC_VERSION' ) ) {
-	define( 'NPWC_VERSION', '1.3.0' );
+	define( 'NPWC_VERSION', '1.4.0' );
 }
 
 if ( ! defined( 'NPWC_PLUGIN_URL' ) ) {
@@ -106,7 +106,9 @@ function npwc_is_wc_nowpayments_settings_page() {
 	return 'wc-settings' === $page && 'checkout' === $tab && 'nowpayments' === $section;
 }
 
-// New Year Sale admin promo notice.
+/** 
+* New Year Sale admin promo notice.
+*/
 add_action(
 	'admin_notices',
 	function () {

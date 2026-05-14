@@ -96,7 +96,6 @@
     position: relative;
 }
 
-/* Override WooCommerce disabled-label cursor on pro teaser rows */
 .woocommerce table.form-table .npwc-pro-trigger-row label:has(input:disabled),
 .woocommerce table.form-table .npwc-pro-trigger-row label:has(input:disabled) * {
     cursor: pointer !important;
@@ -216,6 +215,31 @@
     margin-bottom: 16px;
 }
 
+.npwc-pro-popup-features {
+    list-style: none;
+    margin: 0 auto 16px;
+    padding: 0;
+    max-width: 520px;
+    text-align: left;
+}
+
+.npwc-pro-popup-features li {
+    position: relative;
+    padding-left: 22px;
+    margin-bottom: 8px;
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.45;
+}
+
+.npwc-pro-popup-features li::before {
+    content: '\2713';
+    position: absolute;
+    left: 0;
+    color: #6c5dd3;
+    font-weight: 700;
+}
+
 .npwc-pro-popup-upgrade {
     display: block;
     width: 100%;
@@ -311,6 +335,93 @@
     line-height: 1.6;
     margin: 0;
     text-align: center;
+}
+
+/* Dashboard React Pro modal only */
+.npwc-pro-popup-overlay.npwc-pro-popup--dashboard-dark {
+    background: rgba(2, 6, 18, 0.82);
+    backdrop-filter: blur(6px);
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-content::before {
+    opacity: 0.55;
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-content::after {
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    border-color: rgba(129, 140, 248, 0.45);
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-close {
+    background: rgba(30, 41, 59, 0.95);
+    border-color: rgba(148, 163, 184, 0.3);
+    color: #fb7185;
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-close:hover,
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-close:focus {
+    background: rgba(51, 65, 85, 0.98);
+    border-color: rgba(148, 163, 184, 0.45);
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-inner h2 {
+    color: #f1f5f9;
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-inner p {
+    color: #94a3b8;
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-features li {
+    color: #cbd5e1;
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-features li::before {
+    color: #a78bfa;
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-offer {
+    color: #fb923c;
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-dismiss {
+    color: #94a3b8;
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-dismiss:hover,
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-dismiss:focus {
+    color: #e2e8f0;
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-divider {
+    background: rgba(148, 163, 184, 0.22);
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-trust-badges {
+    background: rgba(15, 23, 42, 0.75);
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-trust-icon-wrapper {
+    background: rgba(30, 41, 59, 0.95);
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    box-shadow: none;
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-trust-icon {
+    color: #c4b5fd;
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-trust-text-primary {
+    color: #e2e8f0;
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-trust-text-secondary {
+    color: #94a3b8;
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-footer-text {
+    color: #94a3b8;
 }
 
 @keyframes npwc-gradient-border {
@@ -500,5 +611,10 @@
     }
 }
 
-
-
+#adminmenu .wp-submenu a[href*="page=npwc-get-pro"] {
+    background-color: rgb(128, 118, 255);
+    color: #fff !important;
+    padding: 8px 22px 8px 12px !important;
+    position: relative;
+    font-family: 'Poppins', sans-serif;
+}
