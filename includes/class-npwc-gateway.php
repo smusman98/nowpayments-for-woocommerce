@@ -33,6 +33,8 @@ class NPWC_Gateway extends WC_Payment_Gateway {
 
 		add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
 		add_action( 'woocommerce_api_npwc_gateway', array( $this, 'ipn_callback' ) );
+		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_payment_styles' ) );
 	}
 
 	/**
@@ -135,6 +137,20 @@ class NPWC_Gateway extends WC_Payment_Gateway {
 				'default'           => add_query_arg( 'wc-api', 'NPWC_Gateway', home_url( '/' ) ),
 				'custom_attributes' => array( 'readonly' => 'readonly' ),
 			),
+			'onsite_payment'      => array(
+				'title'       => 'On-site payment instructions',
+				'type'        => 'checkbox',
+				'label'       => __( 'Show crypto deposit address on your store (recommended for sandbox / ETH)', 'nowpayments-for-woocommerce' ),
+				'default'     => 'no',
+				'description' => __( 'Skips the NOWPayments wallet-connect page that can fail with Web3Modal errors. Set the pay currency field below (defaults to eth if empty).', 'nowpayments-for-woocommerce' ),
+			),
+			'onsite_pay_currency' => array(
+				'title'       => __( 'Pay currency (on-site mode)', 'nowpayments-for-woocommerce' ),
+				'type'        => 'text',
+				'description' => __( 'Required when on-site mode is enabled. Examples: eth, btc, usdttrc20.', 'nowpayments-for-woocommerce' ),
+				'default'     => 'eth',
+				'desc_tip'    => true,
+			),
 		);
 	}
 
@@ -160,6 +176,11 @@ class NPWC_Gateway extends WC_Payment_Gateway {
 			WC_Admin_Settings::add_error( 'Error: SandBox API Key is required.' );
 			return false;
 		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies nonce for payment gateway settings.
+		if ( isset( $_POST['woocommerce_nowpayments_onsite_payment'] ) && empty( $_POST['woocommerce_nowpayments_onsite_pay_currency'] ) ) {
+			$_POST['woocommerce_nowpayments_onsite_pay_currency'] = 'eth';
+		}
 	}
 
 	/**
@@ -182,7 +203,203 @@ class NPWC_Gateway extends WC_Payment_Gateway {
 			$api_key = $this->get_option( 'sandbox_api_key' );
 		}
 
+		if ( $this->is_onsite_payment_enabled() ) {
+			$pay_currency = $this->get_onsite_pay_currency( $order );
+			if ( '' === $pay_currency ) {
+				wc_add_notice(
+					__( 'NOWPayments on-site mode is enabled but no pay currency is set. Enter eth (or another ticker) in payment settings.', 'nowpayments-for-woocommerce' ),
+					'error'
+				);
+				return array( 'result' => 'failure' );
+			}
+
+			$onsite = $this->process_onsite_checkout( $is_live, $api_key, $order, $pay_currency );
+			if ( ! empty( $onsite['result'] ) && 'success' === $onsite['result'] ) {
+				return $onsite;
+			}
+
+			return array( 'result' => 'failure' );
+		}
+
 		return $this->off_site_checkout( $is_live, $api_key, $order );
+	}
+
+	/**
+	 * Whether on-site payment mode is enabled in gateway settings.
+	 *
+	 * @return bool
+	 */
+	private function is_onsite_payment_enabled() {
+		$enabled = ( 'yes' === $this->get_option( 'onsite_payment' ) );
+		return (bool) apply_filters( 'npwc_use_onsite_payment', $enabled, null );
+	}
+
+	/**
+	 * Pay currency for on-site API payments (defaults to eth when setting is empty).
+	 *
+	 * @param WC_Order $order Order.
+	 * @return string Lowercase ticker or empty string.
+	 */
+	private function get_onsite_pay_currency( $order ) {
+		$currency = strtolower( trim( (string) $this->get_option( 'onsite_pay_currency', '' ) ) );
+		$currency = strtolower( trim( (string) apply_filters( 'npwc_onsite_pay_currency', $currency, $order ) ) );
+
+		if ( '' === $currency && $this->is_onsite_payment_enabled() ) {
+			$currency = 'eth';
+		}
+
+		return $currency;
+	}
+
+	/**
+	 * Create payment via API and redirect to the order pay page with deposit details.
+	 *
+	 * @param bool     $is_live      True for live.
+	 * @param string   $api_key      API key.
+	 * @param WC_Order $order        Order.
+	 * @param string   $pay_currency Crypto ticker.
+	 * @return array
+	 */
+	private function process_onsite_checkout( $is_live, $api_key, $order, $pay_currency ) {
+
+		$api     = new NPEC_API( $api_key, $is_live );
+		$payment = $api->create_payment(
+			array(
+				'price_amount'      => (float) $order->get_total(),
+				'price_currency'    => strtolower( $order->get_currency() ),
+				'pay_currency'      => $pay_currency,
+				'ipn_callback_url'  => $this->get_option( 'webhook_url' ),
+				'order_id'          => (string) $order->get_id(),
+				'order_description' => sprintf(
+					/* translators: %s: WooCommerce order number */
+					__( 'WooCommerce order #%s', 'nowpayments-for-woocommerce' ),
+					$order->get_order_number()
+				),
+			)
+		);
+
+		if ( is_wp_error( $payment ) ) {
+			wc_add_notice( $payment->get_error_message(), 'error' );
+			return array( 'result' => 'failure' );
+		}
+
+		$pay_address = $this->extract_pay_address_from_payment( $payment );
+
+		if ( '' === $pay_address ) {
+			wc_add_notice(
+				__( 'NOWPayments did not return a deposit address. Check your API key, currency pair, and sandbox account.', 'nowpayments-for-woocommerce' ),
+				'error'
+			);
+			return array( 'result' => 'failure' );
+		}
+
+		$order->update_meta_data( '_npwc_payment_id', isset( $payment['payment_id'] ) ? (string) $payment['payment_id'] : '' );
+		$order->update_meta_data( '_npwc_pay_address', $pay_address );
+		$order->update_meta_data( '_npwc_pay_amount', isset( $payment['pay_amount'] ) ? (string) $payment['pay_amount'] : '' );
+		$order->update_meta_data( '_npwc_pay_currency', isset( $payment['pay_currency'] ) ? (string) $payment['pay_currency'] : $pay_currency );
+		$order->save();
+
+		if ( ! $order->has_status( array( 'pending', 'on-hold', 'failed', 'cancelled' ) ) ) {
+			$order->update_status( 'on-hold', __( 'Awaiting NOWPayments crypto transfer.', 'nowpayments-for-woocommerce' ) );
+		}
+
+		return array(
+			'result'   => 'success',
+			'redirect' => $order->get_checkout_payment_url( true ),
+		);
+	}
+
+	/**
+	 * Resolve deposit address from a NOWPayments payment API response.
+	 *
+	 * @param array $payment API response body.
+	 * @return string
+	 */
+	private function extract_pay_address_from_payment( $payment ) {
+		foreach ( array( 'pay_address', 'payment_address', 'deposit_address' ) as $key ) {
+			if ( ! empty( $payment[ $key ] ) && is_string( $payment[ $key ] ) ) {
+				return $payment[ $key ];
+			}
+		}
+		return '';
+	}
+
+	/**
+	 * Order pay page: show deposit address and amount (no WalletConnect).
+	 *
+	 * @param int $order_id Order ID.
+	 * @return void
+	 */
+	public function receipt_page( $order_id ) {
+		$order = wc_get_order( $order_id );
+		if ( ! $order || $order->get_payment_method() !== $this->id ) {
+			return;
+		}
+
+		$pay_address  = $order->get_meta( '_npwc_pay_address' );
+		$pay_amount   = $order->get_meta( '_npwc_pay_amount' );
+		$pay_currency = strtoupper( (string) $order->get_meta( '_npwc_pay_currency' ) );
+
+		if ( '' === $pay_address ) {
+			return;
+		}
+
+		$qr_url = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . rawurlencode( $pay_address );
+		?>
+		<div class="npwc-payment-instructions">
+			<h2><?php esc_html_e( 'Complete your crypto payment', 'nowpayments-for-woocommerce' ); ?></h2>
+			<p class="npwc-payment-note">
+				<?php esc_html_e( 'Send the exact amount below to the deposit address. Do not use “Connect wallet” on NOWPayments — pay manually from your wallet app.', 'nowpayments-for-woocommerce' ); ?>
+			</p>
+			<?php if ( '' !== $pay_amount && '' !== $pay_currency ) : ?>
+				<div class="npwc-payment-row">
+					<strong><?php esc_html_e( 'Amount to pay', 'nowpayments-for-woocommerce' ); ?></strong>
+					<div class="npwc-payment-value npwc-payment-amount">
+						<?php echo esc_html( $pay_amount . ' ' . $pay_currency ); ?>
+					</div>
+				</div>
+			<?php endif; ?>
+			<div class="npwc-payment-row">
+				<strong><?php esc_html_e( 'Deposit address', 'nowpayments-for-woocommerce' ); ?></strong>
+				<div class="npwc-payment-value"><?php echo esc_html( $pay_address ); ?></div>
+			</div>
+			<div class="npwc-payment-qr">
+				<img src="<?php echo esc_url( $qr_url ); ?>" width="200" height="200" alt="<?php esc_attr_e( 'Payment QR code', 'nowpayments-for-woocommerce' ); ?>" />
+			</div>
+			<p class="npwc-payment-note">
+				<?php esc_html_e( 'Your order will update automatically after the payment is confirmed on the blockchain.', 'nowpayments-for-woocommerce' ); ?>
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Enqueue styles on the order pay page for NOWPayments orders.
+	 *
+	 * @return void
+	 */
+	public function enqueue_payment_styles() {
+		if ( ! is_checkout_pay_page() ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only order id for styling.
+		$order_id = isset( $_GET['key'] ) ? wc_get_order_id_by_order_key( wc_clean( wp_unslash( $_GET['key'] ) ) ) : 0;
+		if ( ! $order_id ) {
+			return;
+		}
+
+		$order = wc_get_order( $order_id );
+		if ( ! $order || $order->get_payment_method() !== $this->id || ! $order->get_meta( '_npwc_pay_address' ) ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'npwc-payment',
+			NPWC_PLUGIN_URL . 'assets/css/npwc-payment.css',
+			array(),
+			NPWC_VERSION
+		);
 	}
 
 	/**
@@ -197,18 +414,23 @@ class NPWC_Gateway extends WC_Payment_Gateway {
 	 */
 	public function off_site_checkout( $is_live, $api_key, $order ) {
 
-		$order_id = $order->id;
+		$order_id = $order->get_id();
 
 		$parameters = array(
-			'dataSource'      => 'woocommerce',
-			'ipnURL'          => $this->get_option( 'webhook_url' ),
-			'paymentCurrency' => $order->get_currency(),
-			'successURL'      => $this->get_return_url( $order ),
-			'cancelURL'       => esc_url_raw( $order->get_cancel_order_url_raw() ),
-			'orderID'         => $order_id,
-			'customerName'    => $order->billing_first_name,
-			'customerEmail'   => $order->billing_email,
-			'paymentAmount'   => number_format( $order->get_total(), 8, '.', '' ),
+			'dataSource'        => 'woocommerce',
+			'ipnURL'            => $this->get_option( 'webhook_url' ),
+			'paymentCurrency'   => $order->get_currency(),
+			'successURL'        => $this->get_return_url( $order ),
+			'cancelURL'         => esc_url_raw( $order->get_cancel_order_url_raw() ),
+			'orderID'           => (string) $order_id,
+			'order_description' => sprintf(
+				/* translators: %s: WooCommerce order number */
+				__( 'WooCommerce order #%s', 'nowpayments-for-woocommerce' ),
+				$order->get_order_number()
+			),
+			'customerName'      => $order->get_billing_first_name(),
+			'customerEmail'     => $order->get_billing_email(),
+			'paymentAmount'     => number_format( (float) $order->get_total(), 8, '.', '' ),
 		);
 
 		$order_items = $order->get_items();
@@ -223,6 +445,20 @@ class NPWC_Gateway extends WC_Payment_Gateway {
 
 		$nowpayments  = new NPEC_API( $api_key, $is_live );
 		$redirect_url = $nowpayments->off_page_checkout( $parameters );
+
+		if ( empty( $redirect_url ) ) {
+			wc_add_notice(
+				__( 'Unable to start NOWPayments checkout. Please verify your API key and try again.', 'nowpayments-for-woocommerce' ),
+				'error'
+			);
+			return array(
+				'result' => 'failure',
+			);
+		}
+
+		if ( ! $order->has_status( array( 'pending', 'failed', 'cancelled' ) ) ) {
+			$order->update_status( 'pending', __( 'Customer redirected to NOWPayments.', 'nowpayments-for-woocommerce' ) );
+		}
 
 		return array(
 			'result'   => 'success',
@@ -286,7 +522,14 @@ class NPWC_Gateway extends WC_Payment_Gateway {
 			}
 		}
 
-		$order = wc_get_order( $request['order_id'] );
+		$wc_order_id = 0;
+		if ( isset( $request['order_id'] ) ) {
+			$wc_order_id = absint( $request['order_id'] );
+		} elseif ( isset( $request['orderID'] ) ) {
+			$wc_order_id = absint( $request['orderID'] );
+		}
+
+		$order = $wc_order_id ? wc_get_order( $wc_order_id ) : false;
 		if ( ! $order || ! ( $order instanceof WC_Order ) ) {
 			status_header( 404 );
 			wp_die( 'Order not found', 'Not Found', array( 'response' => 404 ) );

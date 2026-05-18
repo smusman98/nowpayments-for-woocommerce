@@ -364,6 +364,13 @@ class NPWC_Init {
 		if ( is_string( $host ) && '' !== $host ) {
 			$hosts[] = $host;
 		}
+
+		foreach ( array( 'nowpayments.io', 'sandbox.nowpayments.io' ) as $np_host ) {
+			if ( ! in_array( $np_host, $hosts, true ) ) {
+				$hosts[] = $np_host;
+			}
+		}
+
 		return $hosts;
 	}
 
@@ -769,10 +776,19 @@ class NPWC_Init {
 
 		return array(
 			'apiConfigured' => ! empty( $creds['api_key'] ) ? 1 : 0,
-			'settingsUrl'   => admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nowpayments&from=WCADMIN_PAYMENT_SETTINGS' ),
+			'settingsUrl'   => $this->get_payment_settings_url(),
 			'docsUrl'       => esc_url_raw( $docs_url ),
 			'themeRestUrl'  => esc_url_raw( rest_url( 'npwc/v1/dashboard-theme' ) ),
 		);
+	}
+
+	/**
+	 * WooCommerce checkout settings URL for the NOWPayments gateway section.
+	 *
+	 * @return string
+	 */
+	private function get_payment_settings_url() {
+		return admin_url( 'admin.php?page=wc-settings&tab=checkout&section=nowpayments&from=WCADMIN_PAYMENT_SETTINGS' );
 	}
 
 	/**
@@ -1047,6 +1063,15 @@ class NPWC_Init {
 		);
 
 		array_unshift( $links, $upgrade_link );
+
+		if ( current_user_can( 'manage_woocommerce' ) ) {
+			$settings_link = sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( $this->get_payment_settings_url() ),
+				esc_html__( 'Settings', 'nowpayments-for-woocommerce' )
+			);
+			array_unshift( $links, $settings_link );
+		}
 
 		return $links;
 	}

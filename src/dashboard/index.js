@@ -863,7 +863,7 @@ function App() {
 					</div>
 				</div>
 				<div className="npwc-theme-toggle-wrap">
-					<span>{theme === 'dark' ? 'Light mode' : 'Dark mode'}</span>
+					<span>{theme === 'dark' ? 'Dark mode' : 'Light mode'}</span>
 					<button
 						type="button"
 						className={`npwc-theme-toggle ${theme === 'light' ? 'is-light' : ''}`}

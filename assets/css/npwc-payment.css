@@ -1,0 +1,52 @@
+.npwc-payment-instructions {
+	max-width: 520px;
+	margin: 1.5em auto;
+	padding: 1.5em;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+	background: #fff;
+}
+
+.npwc-payment-instructions h2 {
+	margin: 0 0 0.75em;
+	font-size: 1.25rem;
+}
+
+.npwc-payment-row {
+	margin: 0.75em 0;
+}
+
+.npwc-payment-row strong {
+	display: block;
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #6b7280;
+	margin-bottom: 0.25em;
+}
+
+.npwc-payment-value {
+	font-size: 1rem;
+	word-break: break-all;
+}
+
+.npwc-payment-amount {
+	font-size: 1.35rem;
+	font-weight: 600;
+}
+
+.npwc-payment-qr {
+	text-align: center;
+	margin: 1em 0;
+}
+
+.npwc-payment-qr img {
+	max-width: 200px;
+	height: auto;
+}
+
+.npwc-payment-note {
+	font-size: 0.875rem;
+	color: #4b5563;
+	margin-top: 1em;
+}
