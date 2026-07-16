@@ -3,8 +3,8 @@ Contributors: CoderPress
 Donate link: https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=donate-link
 Tags: woocommerce crypto, cryptocurrency payments, bitcoin payment gateway, crypto checkout, ethereum
 Requires at least: 4.9
-Tested up to: 6.9
-Stable tag: 1.4.0
+Tested up to: 7.0
+Stable tag: 1.4.1
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -142,13 +142,21 @@ Compatibility details: [NOWPayments for WooCommerce Compatibility](https://coder
 
 ---
 
+= Where do I report security bugs found in this plugin? =
+
+Please report security bugs found in the source code of the undefined plugin through the [Patchstack Vulnerability Disclosure  Program](https://patchstack.com/database/vdp/9e5fbc58-42dc-4499-a2fc-8a79aebf44d4). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+
+---
+
 == Changelog ==
 
-= 1.4.0 – May 13, 2026 =
-* Tweak ✨ - Admin NOWPayments Dashboard.
-* Tweak ✨ - Dashboard dark mode: Revenue and Recent Transactions status `<select>` fields match the currency combobox styling (overrides WP admin core-ui on the dashboard screen).
+= 1.4.1 – July 20, 2026 =
+* IMPROVEMENT - Enhanced Webhook Security.
 
-= 1.3.0 – April 10, 2026 =
+= 1.4.0 – May 22, 2026 =
+* NEW ✨ - Introducing all new Dashboard to view crypto orders stats.
+
+= 1.3.0 – Apr 21, 2026 =
 * Updated SDK to latest version.
 * UI improvements.
 
