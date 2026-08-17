@@ -83,32 +83,38 @@ class NPWC_Gateway extends WC_Payment_Gateway {
                 'title'       => 'Live API Key',
                 'type'        => 'password',
                 'description' => sprintf(
-                        'Get your API: %s',
-                        esc_url( 'https://account.nowpayments.io/store-settings' )
+                    /* translators: 1: create account link, 2: store settings link */
+                    __( 'Get your API: %1$s then %2$s', 'nowpayments-for-woocommerce' ),
+                    '<a href="' . esc_url( 'https://account.nowpayments.io/create-account?link_id=3857577492' ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Create Account', 'nowpayments-for-woocommerce' ) . '</a>',
+                    '<a href="' . esc_url( 'https://account.nowpayments.io/store-settings' ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Store Settings', 'nowpayments-for-woocommerce' ) . '</a>'
                 ),
             ),
             'live_ipn_key' => array(
                 'title'       => 'Live IPN Secret Key',
                 'type'        => 'text',
                 'description' => sprintf(
-                    'Get your IPN Secret Key: %s',
-                    esc_url( 'https://account.nowpayments.io/store-settings' )
+                    /* translators: 1: create account link, 2: store settings link */
+                    __( 'Get your IPN Secret Key: %1$s then %2$s', 'nowpayments-for-woocommerce' ),
+                    '<a href="' . esc_url( 'https://account.nowpayments.io/create-account?link_id=3857577492' ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Create Account', 'nowpayments-for-woocommerce' ) . '</a>',
+                    '<a href="' . esc_url( 'https://account.nowpayments.io/store-settings' ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Store Settings', 'nowpayments-for-woocommerce' ) . '</a>'
                 ),
             ),
             'sandbox_api_key' => array(
                 'title'       => 'SandBox API Key',
                 'type'        => 'password',
                 'description' => sprintf(
-                    'Get your API: %s',
-                    esc_url( 'https://account-sandbox.nowpayments.io/store-settings' )
+                    /* translators: %s: store settings link */
+                    __( 'Get your API: %s', 'nowpayments-for-woocommerce' ),
+                    '<a href="' . esc_url( 'https://account-sandbox.nowpayments.io/store-settings' ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( 'https://account-sandbox.nowpayments.io/store-settings' ) . '</a>'
                 ),
             ),
             'sandbox_ipn_key' => array(
                 'title'       => 'SandBox IPN Secret Key',
                 'type'        => 'text',
                 'description' => sprintf(
-                    'Get your IPN Secret Key: %s',
-                    esc_url( 'https://account-sandbox.nowpayments.io/store-settings' )
+                    /* translators: %s: store settings link */
+                    __( 'Get your IPN Secret Key: %s', 'nowpayments-for-woocommerce' ),
+                    '<a href="' . esc_url( 'https://account-sandbox.nowpayments.io/store-settings' ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( 'https://account-sandbox.nowpayments.io/store-settings' ) . '</a>'
                 ),
             ),
             'webhook_url' => array(
