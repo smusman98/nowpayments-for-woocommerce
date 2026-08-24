@@ -268,7 +268,7 @@ body.npwc-dashboard-admin-page #wpbody-content > .update-nag {
 }
 
 .npwc-theme-light .npwc-header {
-	background: linear-gradient(45deg, #ffffff, transparent);
+	background: #ffffff;
 	border-bottom: 1px solid #d9dee7;
 	box-shadow: 0 1px 0 rgba(15, 23, 42, 0.08);
 }

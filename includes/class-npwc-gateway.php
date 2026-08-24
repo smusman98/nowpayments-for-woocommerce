@@ -35,6 +35,47 @@ class NPWC_Gateway extends WC_Payment_Gateway {
 		add_action( 'woocommerce_api_npwc_gateway', array( $this, 'ipn_callback' ) );
 		add_action( 'woocommerce_receipt_' . $this->id, array( $this, 'receipt_page' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_payment_styles' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_checkout_styles' ) );
+	}
+
+	/**
+	 * Payment gateway icon for legacy checkout.
+	 *
+	 * @return string
+	 */
+	public function get_icon() {
+		if ( empty( $this->icon ) ) {
+			return '';
+		}
+
+		$icon_url = $this->icon;
+		if ( class_exists( 'WC_HTTPS' ) ) {
+			$icon_url = WC_HTTPS::force_https_url( $icon_url );
+		}
+
+		return apply_filters(
+			'woocommerce_gateway_icon',
+			'<img src="' . esc_url( $icon_url ) . '" alt="' . esc_attr( $this->get_title() ) . '" class="npwc-gateway-icon" />',
+			$this->id
+		);
+	}
+
+	/**
+	 * Enqueue checkout styles for legacy payment method icon sizing.
+	 *
+	 * @return void
+	 */
+	public function enqueue_checkout_styles() {
+		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'npwc-checkout',
+			NPWC_PLUGIN_URL . 'assets/css/npwc-checkout.css',
+			array(),
+			NPWC_VERSION
+		);
 	}
 
 	/**
