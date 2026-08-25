@@ -3,7 +3,7 @@ Contributors: CoderPress
 Donate link: https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc&utm_medium=donate-link
 Tags: woocommerce crypto, cryptocurrency payments, bitcoin payment gateway, crypto checkout, ethereum
 Requires at least: 4.9
-Tested up to: 7.0
+Tested up to: 7.1
 Stable tag: 1.4.1
 Requires PHP: 5.2.4
 License: GPLv2 or later
