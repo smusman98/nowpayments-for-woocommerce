@@ -69,23 +69,18 @@ class NPEC_API {
 	}
 
 	/**
-	 * Build URL for off-page checkout (invoice API preferred, legacy data URL as fallback).
+	 * Build URL for off-page checkout via server-side invoice creation.
+	 *
+	 * Creates the invoice with the API key in the x-api-key header only. Never exposes
+	 * the key or editable payment parameters in the browser redirect URL.
 	 *
 	 * @param array $parameters Checkout parameters.
-	 * @return string Redirect URL, or empty string on failure.
+	 * @return string Invoice URL, or empty string on failure.
 	 * @since 1.0
 	 * @version 1.0
 	 */
 	public function off_page_checkout( $parameters = array() ) {
-
-		$invoice_url = $this->create_invoice_checkout_url( $parameters );
-		if ( $invoice_url ) {
-			return $invoice_url;
-		}
-
-		$parameters['apiKey'] = $this->api_key;
-		$encoded              = rawurlencode( wp_json_encode( $parameters ) );
-		return "{$this->endpoint}/payment?data={$encoded}";
+		return $this->create_invoice_checkout_url( $parameters );
 	}
 
 	/**

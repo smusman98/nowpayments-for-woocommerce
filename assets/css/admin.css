@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-
 /* Admin styles for NOWPayments free plugin */
 
 .npwc-pro-badge {
@@ -20,45 +18,121 @@
     initial-value: 0deg;
 }
 
-.npwc-settings-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    align-items: flex-start;
-    overflow: visible;
+body.npwc-nowpayments-settings-page #wpbody-content .wrap.woocommerce {
+    max-width: none;
 }
 
-.npwc-settings-main {
-    flex: 1 1 420px;
+body.npwc-nowpayments-settings-page .npwc-settings-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+        "intro sidebar"
+        "main sidebar";
+    column-gap: 30px;
+    row-gap: 0;
+    align-items: start;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 0 1em;
+}
+
+body.npwc-nowpayments-settings-page .npwc-settings-grid--no-intro {
+    grid-template-rows: auto;
+    grid-template-areas: "main sidebar";
+}
+
+body.npwc-nowpayments-settings-page .npwc-settings-intro {
+    grid-area: intro;
     min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
 }
 
-.npwc-sidebar {
-    flex: 0 0 auto;
-    width: 340px;
+body.npwc-nowpayments-settings-page .npwc-settings-intro h2.wc-admin-header {
+    margin: 0.75em 0 0;
+    padding: 0;
+}
+
+body.npwc-nowpayments-settings-page .npwc-settings-intro p {
+    margin: 0.5em 0 0;
+}
+
+body.npwc-nowpayments-settings-page .npwc-settings-main {
+    grid-area: main;
+    min-width: 0;
+    width: 100%;
+    margin-top: 8px;
+}
+
+body.npwc-nowpayments-settings-page .npwc-settings-main table.form-table {
+    width: 100%;
+    margin-top: 0;
+}
+
+/* Gateway disabled */
+body.npwc-nowpayments-settings-page.npwc-gateway-disabled .npwc-settings-main tbody.npwc-gateway-settings-body,
+body.npwc-nowpayments-settings-page.npwc-gateway-disabled .npwc-settings-main tr.npwc-gateway-settings-row {
+    display: none !important;
+}
+
+@media screen and (min-width: 783px) {
+    body.npwc-nowpayments-settings-page .npwc-settings-main table.form-table th.titledesc {
+        width: 220px;
+        padding-right: 16px;
+    }
+}
+
+body.npwc-nowpayments-settings-page .npwc-settings-main p.submit {
+    margin-top: 1em;
+    padding-top: 0;
+    clear: both;
+}
+
+body.npwc-nowpayments-settings-page .npwc-sidebar {
+    grid-area: sidebar;
+    width: 320px;
     max-width: 100%;
     position: sticky;
-    top: 115px;
-    align-self: flex-start;
+    top: 32px;
+    align-self: start;
+    margin-top: 0.75em;
 }
 
-@media screen and (max-width: 1320px) {
-    .npwc-settings-grid {
-        flex-direction: column;
-        gap: 24px;
+body.admin-bar.npwc-nowpayments-settings-page .npwc-sidebar {
+    top: 46px;
+}
+
+@media screen and (max-width: 1180px) {
+    body.npwc-nowpayments-settings-page .npwc-settings-grid {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto;
+        grid-template-areas:
+            "intro"
+            "main"
+            "sidebar";
+        row-gap: 16px;
     }
 
-    .npwc-settings-main {
-        flex: none;
-        width: 100%;
-        max-width: 100%;
+    body.npwc-nowpayments-settings-page .npwc-settings-grid--no-intro {
+        grid-template-areas:
+            "main"
+            "sidebar";
     }
 
-    .npwc-sidebar {
+    body.npwc-nowpayments-settings-page .npwc-sidebar {
         width: 100%;
         position: static;
         top: auto;
     }
+}
+
+/* Keep the Pro preview GIFs inside the column on small screens. */
+.npwc-settings-main .forminp img[src*="product-page.gif"],
+.npwc-settings-main .forminp img[src*="shop-page.gif"] {
+    max-width: 100%;
+    height: auto;
 }
 
 .npwc-sidebar .npwc-card {
@@ -96,6 +170,10 @@
     position: relative;
 }
 
+.npwc-pro-trigger-row input[type="checkbox"] {
+    pointer-events: none;
+}
+
 .woocommerce table.form-table .npwc-pro-trigger-row label:has(input:disabled),
 .woocommerce table.form-table .npwc-pro-trigger-row label:has(input:disabled) * {
     cursor: pointer !important;
@@ -108,111 +186,150 @@
 .npwc-pro-popup-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.65);
+    background: rgba(15, 23, 42, 0.45);
     z-index: 99999;
     display: flex;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(3px);
     padding: 20px;
 }
 
 .npwc-pro-popup-content {
     position: relative;
     background: transparent;
-    padding: 0;
-    border-radius: 16px;
-    width: 640px;
+    border: none;
+    border-radius: 14px;
+    width: 520px;
     max-width: 95vw;
-    animation: npwc-popup-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.12);
+    overflow: hidden;
+    isolation: isolate;
 }
 
 .npwc-pro-popup-content::before {
     content: '';
     position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    border-radius: 16px;
-    background: linear-gradient(270deg, #6c5dd3, #8f6ed5, #4f8cff, #6c5dd3);
-    background-size: 400% 400%;
-    animation: npwc-gradient-border 4s ease infinite;
-    z-index: -1;
-    opacity: 0.35;
+    inset: 0;
+    border-radius: 14px;
+    background: linear-gradient(120deg, #6c5dd3, #4f8cff, #a78bfa, #6c5dd3, #4f8cff);
+    background-size: 300% 300%;
+    animation: npwc-pro-border-flow 6s ease infinite;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .npwc-pro-popup-content::after {
     content: '';
-    position: relative;
-    inset: 0;
-    background: #ffffff;
-    border-radius: 14px;
-    z-index: -1;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-    border: solid #6c5dd3 3px;
     position: absolute;
+    inset: 2px;
+    border-radius: 12px;
+    background: #ffffff;
+    z-index: 1;
+    pointer-events: none;
+}
+
+@keyframes npwc-pro-border-flow {
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
 }
 
 .npwc-pro-popup-inner {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     font-family: 'Poppins', sans-serif;
-    padding: 28px 24px 22px;
+    padding: 28px 28px 24px;
     text-align: center;
+}
+
+.npwc-pro-popup-rocket {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 10px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #f5f3ff 0%, #ebe6ff 100%);
+    border: 1px solid rgba(108, 93, 211, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    line-height: 1;
+    box-shadow: 0 4px 12px rgba(108, 93, 211, 0.12);
 }
 
 .npwc-pro-popup-close {
     position: absolute;
-    right: 16px;
-    top: 14px;
-    border: 1px solid rgba(108, 93, 211, 0.15);
-    border-radius: 20%;
-    background: rgba(255, 255, 255, 0.9);
-    color: #ef476f;
+    right: 12px;
+    top: 12px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #64748b;
     cursor: pointer;
-    width: 30px;
-    height: 30px;
-    font-size: 10px;
-    line-height: 1;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     z-index: 5;
-    pointer-events: auto;
-    user-select: none;
-    -webkit-user-select: none;
-    cursor: pointer !important;
+    padding: 0;
 }
 
-.npwc-pro-popup-close:hover {
-    background: #ffffff;
-    border-color: rgba(108, 93, 211, 0.25);
-}
-
-.npwc-pro-popup-rocket {
-    font-size: 56px;
+.npwc-pro-popup-close .dashicons {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
     line-height: 1;
-    margin-bottom: 14px;
+}
+
+.npwc-pro-popup-close:hover,
+.npwc-pro-popup-close:focus {
+    background: #f1f5f9;
+    color: #334155;
+    outline: none;
+    box-shadow: none;
+}
+
+.npwc-pro-popup-eyebrow {
+    margin: 0 0 6px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #6c5dd3;
 }
 
 .npwc-pro-popup-inner h2 {
-    margin: 0 0 8px;
-    font-size: 30px;
-    font-weight: 700;
-    line-height: 1.12;
-    color: #1f2937;
-    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.25;
+    color: #111827;
 }
 
-.npwc-pro-popup-inner p {
-    margin: 0 0 16px;
-    color: #6b7280;
+.npwc-pro-popup-inner > p:not(.npwc-pro-popup-offer):not(.npwc-footer-text) {
+    margin: 0 0 14px;
+    color: #4b5563;
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1.55;
 }
 
 .npwc-pro-popup-offer {
-    color: #ff5b3a;
-    font-size: 16px;
-    margin-bottom: 16px;
+    margin: 0 0 20px;
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.npwc-pro-popup-actions {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto 4px;
 }
 
 .npwc-pro-popup-features {
@@ -240,37 +357,62 @@
     font-weight: 700;
 }
 
-.npwc-pro-popup-upgrade {
+.npwc-pro-popup-inner a.npwc-pro-popup-upgrade {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 46px;
+    margin: 0 0 10px;
+    padding: 12px 24px;
+    background: #6c5dd3;
+    color: #fff !important;
+    text-decoration: none;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+    border: 1px solid #5f52c6;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+    transition: none;
+    cursor: pointer;
+}
+
+.npwc-pro-popup-inner a.npwc-pro-popup-upgrade:hover,
+.npwc-pro-popup-inner a.npwc-pro-popup-upgrade:focus,
+.npwc-pro-popup-inner a.npwc-pro-popup-upgrade:active {
+    color: #fff !important;
+    background: #6c5dd3;
+    border-color: #5f52c6;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+    outline: none;
+    transform: none;
+}
+
+.npwc-pro-popup-actions button.npwc-pro-popup-dismiss {
     display: block;
     width: 100%;
-    max-width: 520px;
-    margin: 0 auto 14px;
-    background: linear-gradient(135deg, #6c5dd3 0%, #4f8cff 100%);
-    color: #fff;
-    text-decoration: none;
-    border-radius: 12px;
-    padding: 14px 22px;
-    font-size: 20px;
-    font-weight: 700;
-    box-shadow: 0 10px 26px rgba(108, 93, 211, 0.3);
-}
-
-.npwc-pro-popup-upgrade:hover {
-    color: #fff;
-    box-shadow: 0 14px 30px rgba(108, 93, 211, 0.36);
-}
-
-.npwc-pro-popup-dismiss {
     border: 0;
     background: transparent;
-    color: #6b7280;
+    color: #6b7280 !important;
     font-size: 13px;
+    font-weight: 500;
     cursor: pointer;
-    padding: 0;
+    padding: 6px 0 0;
+    text-decoration: none;
+    box-shadow: none;
 }
 
-.npwc-pro-popup-dismiss:hover {
-    color: #4b5563;
+.npwc-pro-popup-actions .npwc-pro-popup-dismiss:hover,
+.npwc-pro-popup-actions .npwc-pro-popup-dismiss:focus,
+.npwc-pro-popup-actions .npwc-pro-popup-dismiss:active {
+    color: #374151;
+    background: transparent;
+    outline: none;
+    box-shadow: none;
 }
 
 .npwc-divider {
@@ -291,9 +433,14 @@
 
 .npwc-trust-badge {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
     flex: 1;
+    min-width: 0;
+}
+
+.npwc-trust-text {
+    text-align: left;
     min-width: 0;
 }
 
@@ -331,7 +478,7 @@
 
 .npwc-footer-text {
     font-size: 12px;
-    color: #000;
+    color: #9ca3af;
     line-height: 1.6;
     margin: 0;
     text-align: center;
@@ -343,55 +490,66 @@
     backdrop-filter: blur(6px);
 }
 
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-content {
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.35);
+}
+
 .npwc-pro-popup--dashboard-dark .npwc-pro-popup-content::before {
-    opacity: 0.55;
+    background: linear-gradient(120deg, #a78bfa, #6366f1, #818cf8, #c4b5fd, #6366f1);
+    background-size: 300% 300%;
 }
 
 .npwc-pro-popup--dashboard-dark .npwc-pro-popup-content::after {
-    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-    border-color: rgba(129, 140, 248, 0.45);
-    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+    background: #1e293b;
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-rocket {
+    background: linear-gradient(145deg, #312e81 0%, #1e293b 100%);
+    border-color: rgba(167, 139, 250, 0.35);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-eyebrow {
+    color: #a78bfa;
 }
 
 .npwc-pro-popup--dashboard-dark .npwc-pro-popup-close {
-    background: rgba(30, 41, 59, 0.95);
-    border-color: rgba(148, 163, 184, 0.3);
-    color: #fb7185;
+    color: #94a3b8;
 }
 
 .npwc-pro-popup--dashboard-dark .npwc-pro-popup-close:hover,
 .npwc-pro-popup--dashboard-dark .npwc-pro-popup-close:focus {
-    background: rgba(51, 65, 85, 0.98);
-    border-color: rgba(148, 163, 184, 0.45);
+    background: rgba(51, 65, 85, 0.6);
+    color: #e2e8f0;
 }
 
 .npwc-pro-popup--dashboard-dark .npwc-pro-popup-inner h2 {
-    color: #f1f5f9;
+    color: #f8fafc;
 }
 
-.npwc-pro-popup--dashboard-dark .npwc-pro-popup-inner p {
-    color: #94a3b8;
-}
-
-.npwc-pro-popup--dashboard-dark .npwc-pro-popup-features li {
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-inner > p:not(.npwc-pro-popup-offer):not(.npwc-footer-text) {
     color: #cbd5e1;
 }
 
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-features li {
+    color: #e2e8f0;
+}
+
 .npwc-pro-popup--dashboard-dark .npwc-pro-popup-features li::before {
-    color: #a78bfa;
+    color: #c4b5fd;
 }
 
 .npwc-pro-popup--dashboard-dark .npwc-pro-popup-offer {
-    color: #fb923c;
+    color: #a8b4c6;
 }
 
-.npwc-pro-popup--dashboard-dark .npwc-pro-popup-dismiss {
-    color: #94a3b8;
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-actions button.npwc-pro-popup-dismiss {
+    color: #94a3b8 !important;
 }
 
-.npwc-pro-popup--dashboard-dark .npwc-pro-popup-dismiss:hover,
-.npwc-pro-popup--dashboard-dark .npwc-pro-popup-dismiss:focus {
-    color: #e2e8f0;
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-actions button.npwc-pro-popup-dismiss:hover,
+.npwc-pro-popup--dashboard-dark .npwc-pro-popup-actions button.npwc-pro-popup-dismiss:focus {
+    color: #e2e8f0 !important;
 }
 
 .npwc-pro-popup--dashboard-dark .npwc-divider {
@@ -417,28 +575,11 @@
 }
 
 .npwc-pro-popup--dashboard-dark .npwc-trust-text-secondary {
-    color: #94a3b8;
+    color: #cbd5e1;
 }
 
 .npwc-pro-popup--dashboard-dark .npwc-footer-text {
-    color: #94a3b8;
-}
-
-@keyframes npwc-gradient-border {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-@keyframes npwc-popup-in {
-    from {
-        opacity: 0;
-        transform: scale(0.92) translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
+    color: #a8b4c6;
 }
 
 @media (max-width: 782px) {
@@ -447,15 +588,7 @@
     }
 
     .npwc-pro-popup-inner h2 {
-        font-size: 34px;
-    }
-
-    .npwc-pro-popup-inner p {
-        font-size: 15px;
-    }
-
-    .npwc-pro-popup-upgrade {
-        font-size: 28px;
+        font-size: 22px;
     }
 
     .npwc-trust-badges {
@@ -617,4 +750,92 @@
     padding: 8px 22px 8px 12px !important;
     position: relative;
     font-family: 'Poppins', sans-serif;
+}
+
+/* Hide "Manage" button when "Enable" button is present */
+.woocommerce-list__item:has(img.woocommerce-list__item-image[src*="nowpayments-for-woocommerce/assets/images/icon.png"]) .woocommerce-list__item-buttons__actions > :first-child:not(:only-child) ~ *,
+.woocommerce-list__item:has(a[href*="section=nowpayments&"], a[href$="section=nowpayments"]) .woocommerce-list__item-buttons__actions > :first-child:not(:only-child) ~ * {
+    display: none;
+}
+
+/* Webhook URL + copy */
+.npwc-webhook-url-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 100%;
+}
+
+.npwc-webhook-url-field input[type="text"] {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.npwc-webhook-url-field .npwc-copy-webhook-url {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    gap: 4px;
+    min-width: 36px;
+    height: 30px;
+    padding: 0 8px;
+    margin: 0;
+}
+
+.npwc-webhook-url-field .npwc-copy-webhook-url .dashicons {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.npwc-webhook-url-field .npwc-copy-webhook-url.npwc-copy-done,
+.npwc-webhook-url-field .npwc-copy-webhook-url.npwc-copy-done:hover,
+.npwc-webhook-url-field .npwc-copy-webhook-url.npwc-copy-done:focus {
+    border-color: #0a4b78;
+    color: #0a4b78;
+    background: #dbeafe;
+    padding: 0 10px;
+}
+
+.npwc-webhook-url-field .npwc-copy-webhook-url.npwc-copy-done::after {
+    content: attr(data-copied-label);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* Payment mode: Live / SandBox on one row */
+body.npwc-nowpayments-settings-page tr.npwc-settings-radio-inline .forminp-radio fieldset ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+body.npwc-nowpayments-settings-page tr.npwc-settings-radio-inline .forminp-radio fieldset ul li {
+    margin: 0;
+    padding: 0;
+}
+
+body.npwc-nowpayments-settings-page tr.npwc-settings-radio-inline .forminp-radio fieldset ul li label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+}
+
+/* Live vs Sandbox credential rows */
+body.npwc-active-mode-live tr.npwc-settings-env--sandbox {
+    display: none !important;
+}
+
+body.npwc-active-mode-sandbox tr.npwc-settings-env--live {
+    display: none !important;
 }

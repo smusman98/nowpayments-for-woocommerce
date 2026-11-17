@@ -77,26 +77,33 @@ function ProUpgradeModal({ upgradeUrl, description, onClose, theme = 'dark' }) {
 				onClick={(e) => e.stopPropagation()}
 			>
 				<button type="button" className="npwc-pro-popup-close" onClick={onClose} aria-label="Close dialog">
-					❌
+					<span className="dashicons dashicons-no-alt" aria-hidden="true" />
 				</button>
 				<div className="npwc-pro-popup-inner">
 					<div className="npwc-pro-popup-rocket" aria-hidden="true">
 						🚀
 					</div>
+					<p className="npwc-pro-popup-eyebrow">NOWPayments Pro</p>
 					<h2 id="npwc-pro-popup-heading">Unlock Your Pro Access</h2>
-					{description ? <p>{description}</p> : null}
+					{description ? (
+						<p>{description}</p>
+					) : (
+						<p>Upgrade for advanced checkout features, icons, subscriptions, and priority support.</p>
+					)}
 					<ul className="npwc-pro-popup-features">
 						{PRO_UPGRADE_FEATURES.map((line) => (
 							<li key={line}>{line}</li>
 						))}
 					</ul>
-					<div className="npwc-pro-popup-offer">✨ Special intro offer – limited time only</div>
-					<a href={upgradeUrl} target="_blank" rel="noopener noreferrer" className="npwc-pro-popup-upgrade npwc-pro-upgrade-link">
-						Upgrade to Pro →
-					</a>
-					<button type="button" className="npwc-pro-popup-dismiss" onClick={onClose}>
-						No thanks, maybe later.
-					</button>
+					<p className="npwc-pro-popup-offer">Limited-time intro pricing</p>
+					<div className="npwc-pro-popup-actions">
+						<a href={upgradeUrl} target="_blank" rel="noopener noreferrer" className="npwc-pro-popup-upgrade npwc-pro-upgrade-link">
+							Upgrade to Pro
+						</a>
+						<button type="button" className="npwc-pro-popup-dismiss" onClick={onClose}>
+							No thanks, maybe later
+						</button>
+					</div>
 					<div className="npwc-divider" />
 					<div className="npwc-trust-badges">
 						<div className="npwc-trust-badge">
@@ -308,48 +315,52 @@ function DashboardCard({ label, value, sub }) {
 function LineChart({ points, labels }) {
 	const maxPoint = Math.max(1, ...points);
 	const yTop = Math.ceil(maxPoint / 2500) * 2500;
-	const yTicks = [0, yTop * 0.25, yTop * 0.5, yTop * 0.75, yTop].map((n) => Math.round(n));
-	const width = 720;
-	const height = 280;
-	const leftPad = 52;
-	const rightPad = 14;
-	const topPad = 12;
-	const bottomPad = 34;
-	const plotWidth = width - leftPad - rightPad;
-	const plotHeight = height - topPad - bottomPad;
-	const chartPoints = points.map((point, index) => {
-		const x = leftPad + (index / Math.max(1, points.length - 1)) * plotWidth;
-		const y = topPad + (1 - point / yTop) * plotHeight;
-		return `${x},${y}`;
-	});
-	const areaPoints = [`${leftPad},${topPad + plotHeight}`, ...chartPoints, `${leftPad + plotWidth},${topPad + plotHeight}`].join(' ');
+	// Fractions from the top of the plot (0 = top, 1 = bottom).
+	const yTicks = [1, 0.75, 0.5, 0.25, 0].map((ratio, idx) => ({ value: Math.round(yTop * ratio), offset: idx / 4 }));
+	const lastIndex = Math.max(1, points.length - 1);
+	// The SVG only draws lines in a 100×100 box stretched to the plot; text lives in HTML so it never distorts.
+	const chartPoints = points.map((point, index) => `${(index / lastIndex) * 100},${(1 - point / yTop) * 100}`);
+	const areaPoints = ['0,100', ...chartPoints, '100,100'].join(' ');
 
 	return (
 		<div className="npwc-chart-wrap">
-			<svg viewBox={`0 0 ${width} ${height}`} className="npwc-line-chart" preserveAspectRatio="none">
-				<defs>
-					<linearGradient id="npwcRevenueGradient" x1="0" y1="0" x2="0" y2="1">
-						<stop offset="0%" stopColor="#1fd69a" stopOpacity="0.45" />
-						<stop offset="100%" stopColor="#1fd69a" stopOpacity="0.05" />
-					</linearGradient>
-				</defs>
-				{yTicks.map((tick, idx) => {
-					const y = topPad + (1 - tick / yTop) * plotHeight;
-					return (
-						<g key={`tick-${idx}`}>
-							<line x1={leftPad} y1={y} x2={leftPad + plotWidth} y2={y} stroke="rgba(106,125,174,0.24)" strokeDasharray="3 5" />
-							<text x={leftPad - 10} y={y + 4} textAnchor="end" className="npwc-y-label">
-								{tick}
-							</text>
-						</g>
-					);
-				})}
-				<polygon points={areaPoints} fill="url(#npwcRevenueGradient)" />
-				<polyline points={chartPoints.join(' ')} fill="none" stroke="#1fd69a" strokeWidth="3" />
-			</svg>
+			<div className="npwc-chart-body">
+				<div className="npwc-chart-y" aria-hidden="true">
+					{yTicks.map((tick) => (
+						<span key={tick.offset} style={{ top: `${tick.offset * 100}%` }}>
+							{tick.value}
+						</span>
+					))}
+				</div>
+				<div className="npwc-chart-plot">
+					<svg viewBox="0 0 100 100" className="npwc-line-chart" preserveAspectRatio="none" aria-hidden="true">
+						<defs>
+							<linearGradient id="npwcRevenueGradient" x1="0" y1="0" x2="0" y2="1">
+								<stop offset="0%" stopColor="#1fd69a" stopOpacity="0.45" />
+								<stop offset="100%" stopColor="#1fd69a" stopOpacity="0.05" />
+							</linearGradient>
+						</defs>
+						{yTicks.map((tick) => (
+							<line
+								key={tick.offset}
+								x1="0"
+								y1={tick.offset * 100}
+								x2="100"
+								y2={tick.offset * 100}
+								className="npwc-chart-gridline"
+								vectorEffect="non-scaling-stroke"
+							/>
+						))}
+						<polygon points={areaPoints} fill="url(#npwcRevenueGradient)" />
+						<polyline points={chartPoints.join(' ')} fill="none" stroke="#1fd69a" strokeWidth="3" vectorEffect="non-scaling-stroke" />
+					</svg>
+				</div>
+			</div>
 			<div className="npwc-axis">
-				{labels.map((label) => (
-					<span key={label}>{label}</span>
+				{labels.map((label, index) => (
+					<span key={label} style={{ left: `${(index / lastIndex) * 100}%` }}>
+						{label}
+					</span>
 				))}
 			</div>
 		</div>
@@ -414,177 +425,48 @@ function SectionTitle({ icon, title, subtitle }) {
 	);
 }
 
-const DEMO_BTC_USD = 68420.55;
-const DEMO_BTC_EUR = 63250;
+/** Demo rates for the Pro-locked converter preview (free build has no live rates). */
+const DEMO_BTC_RATES = {
+	USD: 68420.55,
+	EUR: 63250,
+};
 
-function CurrencyConverter({ restUrl, restNonce, defaultFiat, apiConfigured, previewDemo, omitOuterGrid = false }) {
-	const canUseApi = Number(apiConfigured) === 1;
-	const isLiveApi = !previewDemo && canUseApi;
-	const fiatDefault = (defaultFiat || 'USD').toUpperCase();
-	const fiatDefaultLower = fiatDefault.toLowerCase();
-	const baseFiats = ['usd', 'eur', 'gbp', 'pkr'];
-	const fiatOptions = [...new Set([fiatDefaultLower, ...baseFiats])];
-	const [amount, setAmount] = useState('1');
-	const [from, setFrom] = useState('btc');
-	const [to, setTo] = useState(fiatDefaultLower);
-	const [receive, setReceive] = useState('');
-	const [rateLabel, setRateLabel] = useState('');
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState('');
+/**
+ * Static, non-interactive preview of the Pro currency converter (rendered behind ProLock).
+ */
+function CurrencyConverterPreview({ storeCurrency }) {
+	const fiat = (storeCurrency || 'USD').toUpperCase();
+	const rate = DEMO_BTC_RATES[fiat];
+	const receive = rate ? formatAmount(rate, fiat) : '—';
 
-	useEffect(() => {
-		if (previewDemo) {
-			setError('');
-			setLoading(false);
-			if (from === 'btc' && to === 'usd') {
-				setReceive(formatAmount(DEMO_BTC_USD, 'USD'));
-				setRateLabel(`1 BTC = ${formatAmount(DEMO_BTC_USD, 'USD')} USD`);
-			} else if (from === 'btc' && to === 'eur') {
-				setReceive(formatAmount(DEMO_BTC_EUR, 'EUR'));
-				setRateLabel(`1 BTC = ${formatAmount(DEMO_BTC_EUR, 'EUR')} EUR`);
-			} else {
-				setReceive('—');
-				setRateLabel('');
-			}
-			return;
-		}
-	}, [previewDemo, from, to]);
-
-	useEffect(() => {
-		if (!isLiveApi) {
-			if (!previewDemo) {
-				setReceive('');
-				setRateLabel('');
-				setError('');
-				setLoading(false);
-			}
-			return;
-		}
-		if (!restUrl || !restNonce) {
-			setError('');
-			return;
-		}
-		let cancelled = false;
-		const handle = setTimeout(async () => {
-			const rawAmount = String(amount).replace(/,/g, '').trim();
-			const numAmount = parseFloat(rawAmount);
-			if (!rawAmount || Number.isNaN(numAmount) || numAmount <= 0) {
-				setReceive('');
-				setRateLabel('');
-				setError('');
-				return;
-			}
-			setLoading(true);
-			setError('');
-			try {
-				const params = new URLSearchParams({
-					amount: rawAmount,
-					currency_from: from,
-					currency_to: to,
-				});
-				const res = await fetch(`${restUrl}?${params.toString()}`, {
-					credentials: 'same-origin',
-					headers: { 'X-WP-Nonce': restNonce },
-				});
-				const body = await res.json().catch(() => ({}));
-				if (cancelled) {
-					return;
-				}
-				if (!res.ok) {
-					const msg = body.message || body.code || 'Unable to fetch rate';
-					setError(typeof msg === 'string' ? msg : 'Unable to fetch rate');
-					setReceive('');
-					setRateLabel('');
-					setLoading(false);
-					return;
-				}
-				const est = body.estimated_amount ?? body.estimatedAmount;
-				if (est === undefined || est === null) {
-					setError('Unexpected response');
-					setReceive('');
-					setRateLabel('');
-				} else {
-					const estNum = Number(est);
-					const receiveFmt = formatAmount(estNum, to.toUpperCase());
-					setReceive(receiveFmt);
-					const unitRate = estNum / Math.max(numAmount, Number.EPSILON);
-					setRateLabel(`1 ${from.toUpperCase()} = ${formatAmount(unitRate, to.toUpperCase())} ${to.toUpperCase()}`);
-					setError('');
-				}
-			} catch (err) {
-				if (!cancelled) {
-					setError('Network error');
-					setReceive('');
-					setRateLabel('');
-				}
-			}
-			if (!cancelled) {
-				setLoading(false);
-			}
-		}, 450);
-		return () => {
-			cancelled = true;
-			clearTimeout(handle);
-		};
-	}, [amount, from, to, restUrl, restNonce, isLiveApi, previewDemo]);
-
-	const swapCurrencies = () => {
-		setFrom(to);
-		setTo(from);
-	};
-
-	const panel = (
+	return (
 		<div className="npwc-panel npwc-converter">
 			<div className="npwc-converter-head">
 				<SectionTitle icon="repeat" title="Currency Converter" subtitle="Live crypto — fiat conversion" />
-				<span className={`npwc-converter-badge ${loading ? 'is-loading' : ''}`}>{loading ? 'Updating…' : 'Rates updated'}</span>
+				<span className="npwc-converter-badge">Rates updated</span>
 			</div>
 			<div className="npwc-converter-grid">
 				<div className="npwc-converter-box">
-					<label htmlFor="npwc-send-amount">You send</label>
+					<span className="npwc-converter-label">You send</span>
 					<div className="npwc-converter-row">
-						<input id="npwc-send-amount" type="text" value={amount} onChange={(e) => setAmount(e.target.value)} />
-						<select value={from} onChange={(e) => setFrom(e.target.value)} aria-label="Currency you send">
-							<option value="btc">BTC</option>
-							<option value="eth">ETH</option>
-							<option value="usdt">USDT</option>
-							<option value="sol">SOL</option>
-						</select>
+						<span className="npwc-converter-value">1</span>
+						<span className="npwc-converter-currency">BTC</span>
 					</div>
 				</div>
-				<button type="button" className="npwc-converter-swap npwc-converter-swap-btn" onClick={swapCurrencies} aria-label="Swap currencies">
+				<span className="npwc-converter-swap" aria-hidden="true">
 					⇆
-				</button>
+				</span>
 				<div className="npwc-converter-box">
-					<label htmlFor="npwc-receive-amount">You receive</label>
+					<span className="npwc-converter-label">You receive</span>
 					<div className="npwc-converter-row">
-						<input id="npwc-receive-amount" type="text" readOnly value={loading ? '…' : receive || '—'} />
-						<select value={to} onChange={(e) => setTo(e.target.value)} aria-label="Currency you receive">
-							{fiatOptions.map((code) => (
-								<option key={code} value={code}>
-									{code.toUpperCase()}
-								</option>
-							))}
-						</select>
+						<span className="npwc-converter-value">{receive}</span>
+						<span className="npwc-converter-currency">{fiat}</span>
 					</div>
 				</div>
 			</div>
-			{error && isLiveApi ? <p className="npwc-converter-error">{error}</p> : null}
-			{isLiveApi || previewDemo ? (
-				<p className="npwc-converter-rate">
-					{previewDemo
-						? rateLabel || '1 BTC — live conversion in Pro'
-						: rateLabel || `Enter an amount to estimate ${from.toUpperCase()} → ${to.toUpperCase()}`}
-				</p>
-			) : null}
+			<p className="npwc-converter-rate">{rate ? `1 BTC = ${receive} ${fiat}` : '1 BTC — live conversion in Pro'}</p>
 		</div>
 	);
-
-	if (omitOuterGrid) {
-		return panel;
-	}
-
-	return <section className="npwc-grid">{panel}</section>;
 }
 
 function DonutChart({ values }) {
@@ -628,21 +510,12 @@ function DonutChart({ values }) {
 	);
 }
 
-function TopCoins({ coins }) {
+function TopCoins({ coins, storeCurrency }) {
 	const data = coins && coins.length ? coins : [];
 	const max = Math.max(1, ...data.map((coin) => Number(coin.count || 0)));
 	const step = max <= 200 ? 50 : max <= 400 ? 100 : 200;
 	const yTop = Math.ceil(max / step) * step;
 	const yTicks = [0, Math.round(yTop * 0.25), Math.round(yTop * 0.5), Math.round(yTop * 0.75), yTop];
-	const getLogoUrl = (coin) => {
-		if (coin.logo) {
-			return coin.logo;
-		}
-		return `https://coinicons-api.vercel.app/api/icon/${String(coin.coin || '').toLowerCase()}`;
-	};
-
-	const storeCurrency =
-		(window.npwcDashboardData && window.npwcDashboardData.storeCurrency) || 'USD';
 
 	return (
 		<div className="npwc-panel npwc-top-coins-panel">
@@ -680,22 +553,10 @@ function TopCoins({ coins }) {
 				</div>
 			</div>
 			<div className="npwc-coin-list">
-				{data.map((coin, idx) => (
+				{data.map((coin) => (
 					<div key={coin.coin + '_row'} className="npwc-coin-row">
 						<div className="npwc-coin-left">
-							<img
-								src={getLogoUrl(coin)}
-								alt={coin.coin}
-								className="npwc-coin-logo"
-								onError={(event) => {
-									event.currentTarget.style.display = 'none';
-									const fallback = event.currentTarget.nextElementSibling;
-									if (fallback) {
-										fallback.style.display = 'inline-flex';
-									}
-								}}
-							/>
-							<span className="npwc-coin-badge" style={{ background: coinColorForSymbol(coin.coin), display: 'none' }}>
+							<span className="npwc-coin-badge" style={{ background: coinColorForSymbol(coin.coin) }} aria-hidden="true">
 								{coin.coin.slice(0, 2)}
 							</span>
 							<div className="npwc-coin-text">
@@ -812,32 +673,15 @@ function persistDashboardTheme(theme) {
 function App() {
 	const data = window.npwcDashboardData || {};
 	const metrics = data.metrics || {};
-	const [theme, setTheme] = useState(data.defaultTheme || 'dark');
-	const isPro = !!data.isPro;
+	const [theme, setTheme] = useState(data.defaultTheme || 'light');
 	const upgradeUrl = data.upgradeUrl || '#';
+	const storeCurrency = data.storeCurrency || 'USD';
 	const demoCryptoRevenue = Number(data.demoCryptoRevenueTotal) || 0;
-	const breakdown = data.statusBreakdown || {};
-	const donutPreviewTotal = Object.values(breakdown).reduce((sum, v) => sum + Number(v || 0), 0);
+	const statusBreakdownValues = data.statusBreakdown || { finished: 0, failed: 0, waiting: 0, refunded: 0 };
+	const donutPreviewTotal = Object.values(statusBreakdownValues).reduce((sum, v) => sum + Number(v || 0), 0);
 	const statusDonutSubtitle = `Distribution of ${donutPreviewTotal || metrics.totalOrders || 0} orders`;
 	const labels = useMemo(() => (data.revenueSeries || []).map((item) => item.label), [data.revenueSeries]);
 	const points = useMemo(() => (data.revenueSeries || []).map((item) => Number(item.revenue || 0)), [data.revenueSeries]);
-	const totalRevenue = useMemo(() => points.reduce((acc, point) => acc + point, 0), [points]);
-	const statusBreakdownValues = data.statusBreakdown || { finished: 0, failed: 0, waiting: 0, refunded: 0 };
-	const paymentStatusInner = (
-		<>
-			<SectionTitle icon="activity" title="Payment Status Breakdown" subtitle={statusDonutSubtitle} />
-			<DonutChart values={statusBreakdownValues} />
-			<div className="npwc-legend">
-				{Object.entries(statusBreakdownValues).map(([key, value]) => (
-					<div key={key} className="npwc-legend-item">
-						<span style={{ background: STATUS_COLORS[key] }} />
-						<strong>{legendLabel(key)}</strong>
-						<em>{value}</em>
-					</div>
-				))}
-			</div>
-		</>
-	);
 
 	useEffect(() => {
 		const body = document.body;
@@ -891,88 +735,63 @@ function App() {
 				<DashboardCard label="Successful Payments" value={metrics.successfulPayments || 0} sub="Completed + Processing" />
 				<DashboardCard label="Failed Payments" value={metrics.failedPayments || 0} sub="Failed orders" />
 				<DashboardCard label="Refunded" value={metrics.refundedPayments || 0} sub="Refunded orders" />
-				{isPro ? (
-					<DashboardCard label="Crypto Revenue" value={formatAmount(totalRevenue, data.storeCurrency || 'USD')} sub="Store currency" />
-				) : (
-					<div className="npwc-card-wrap">
-						<ProLock
-							upgradeUrl={upgradeUrl}
-							className="npwc-pro-lock--card"
-							theme={theme}
-							modalDescription="See real crypto revenue in store currency, trends, and exports with Pro."
-						>
-							<DashboardCard
-								label="Crypto Revenue"
-								value={formatAmount(demoCryptoRevenue || totalRevenue, data.storeCurrency || 'USD')}
-								sub="Store currency"
-							/>
-						</ProLock>
-					</div>
-				)}
-			</section>
-
-			{isPro ? (
-				<CurrencyConverter
-					restUrl={data.restUrl}
-					restNonce={data.restNonce}
-					defaultFiat={data.storeCurrency}
-					apiConfigured={data.apiConfigured}
-					previewDemo={false}
-				/>
-			) : (
-				<section className="npwc-grid">
+				<div className="npwc-card-wrap">
 					<ProLock
 						upgradeUrl={upgradeUrl}
-						className="npwc-pro-lock--panel npwc-pro-lock--converter"
+						className="npwc-pro-lock--card"
 						theme={theme}
-						modalDescription="Unlock live crypto ↔ fiat estimates, accurate rates, and full converter tools in Pro."
+						modalDescription="See real crypto revenue in store currency, trends, and exports with Pro."
 					>
-						<CurrencyConverter
-							restUrl={data.restUrl}
-							restNonce={data.restNonce}
-							defaultFiat={data.storeCurrency}
-							apiConfigured={data.apiConfigured}
-							previewDemo
-							omitOuterGrid
-						/>
+						<DashboardCard label="Crypto Revenue" value={formatAmount(demoCryptoRevenue, storeCurrency)} sub="Store currency" />
 					</ProLock>
-				</section>
-			)}
+				</div>
+			</section>
+
+			<section className="npwc-grid">
+				<ProLock
+					upgradeUrl={upgradeUrl}
+					className="npwc-pro-lock--panel npwc-pro-lock--converter"
+					theme={theme}
+					modalDescription="Unlock live crypto ↔ fiat estimates, accurate rates, and full converter tools in Pro."
+				>
+					<CurrencyConverterPreview storeCurrency={storeCurrency} />
+				</ProLock>
+			</section>
 
 			<section className="npwc-grid">
 				<div className="npwc-panel npwc-panel-lg">
 					<SectionTitle icon="activity" title="Payments & Revenue Over Time" subtitle="Last 8 days · store currency" />
 					<LineChart points={points} labels={labels} />
 				</div>
-				{isPro ? (
-					<div className="npwc-panel">{paymentStatusInner}</div>
-				) : (
-					<ProLock upgradeUrl={upgradeUrl} className="npwc-pro-lock--panel" theme={theme} modalDescription="See full status distribution, filters & exports.">
-						<div className="npwc-panel">{paymentStatusInner}</div>
-					</ProLock>
-				)}
+				<ProLock upgradeUrl={upgradeUrl} className="npwc-pro-lock--panel" theme={theme} modalDescription="See full status distribution, filters & exports.">
+					<div className="npwc-panel">
+						<SectionTitle icon="activity" title="Payment Status Breakdown" subtitle={statusDonutSubtitle} />
+						<DonutChart values={statusBreakdownValues} />
+						<div className="npwc-legend">
+							{Object.entries(statusBreakdownValues).map(([key, value]) => (
+								<div key={key} className="npwc-legend-item">
+									<span style={{ background: STATUS_COLORS[key] }} />
+									<strong>{legendLabel(key)}</strong>
+									<em>{value}</em>
+								</div>
+							))}
+						</div>
+					</div>
+				</ProLock>
 			</section>
 
 			<section className="npwc-grid npwc-grid--coins-tx">
-				{isPro ? (
-					<TopCoins coins={data.topCoins || []} />
-				) : (
-					<ProLock upgradeUrl={upgradeUrl} className="npwc-pro-lock--panel" theme={theme} modalDescription="Unlock top coins & methods analytics, charts, and full breakdown in Pro.">
-						<TopCoins coins={data.topCoins || []} />
-					</ProLock>
-				)}
-				{isPro ? (
+				<ProLock upgradeUrl={upgradeUrl} className="npwc-pro-lock--panel" theme={theme} modalDescription="Unlock top coins & methods analytics, charts, and full breakdown in Pro.">
+					<TopCoins coins={data.topCoins || []} storeCurrency={storeCurrency} />
+				</ProLock>
+				<ProLock
+					upgradeUrl={upgradeUrl}
+					className="npwc-pro-lock--panel npwc-pro-lock--transactions"
+					theme={theme}
+					modalDescription="Live IPN feed, search, filters & CSV export."
+				>
 					<TransactionsTable rows={data.recentTransactions || []} upgradeUrl={upgradeUrl} />
-				) : (
-					<ProLock
-						upgradeUrl={upgradeUrl}
-						className="npwc-pro-lock--panel npwc-pro-lock--transactions"
-						theme={theme}
-						modalDescription="Live IPN feed, search, filters & CSV export."
-					>
-						<TransactionsTable rows={data.recentTransactions || []} upgradeUrl={upgradeUrl} />
-					</ProLock>
-				)}
+				</ProLock>
 			</section>
 		</div>
 	);

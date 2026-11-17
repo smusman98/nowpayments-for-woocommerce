@@ -126,66 +126,6 @@ class NPWC_Init {
 		add_action( 'in_admin_header', array( $this, 'suppress_foreign_admin_notices_on_dashboard' ), 1000 );
 		add_filter( 'admin_body_class', array( $this, 'dashboard_body_class' ) );
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
-
-		$is_hidden_notice = get_option( 'npwc_hide_save_cart_notice' );
-		$is_hidden_notice = true;
-
-		if ( ! $is_hidden_notice ) {
-
-			add_action( 'admin_notices', array( $this, 'save_cart_notice' ) );
-			add_action( 'admin_post_npwc_hide_notice', array( $this, 'save_cart_hide_notice' ) );
-
-		}
-
-		if ( ! class_exists( 'YooAnalytics' ) ) {
-
-			add_action( 'woocommerce_product_options_pricing', array( $this, 'add_yooanalytics_banner' ) );
-
-		}
-	}
-
-	/**
-	 * Save Cart Promotional Notice | Action Callback
-	 *
-	 * @since 1.1.1
-	 * @version 1.0
-	 */
-	public function save_cart_notice() {
-
-		?>
-		<div class="notice notice-success is-dismissible npwc-sc-notice" style="border-left-color: #03a0c7; padding: 15px 0;">
-			<div style="display: flex; align-items: center;">
-				<div>
-					<img src="https://i0.wp.com/coderpress.co/wp-content/uploads/2023/12/New-Project.jpg?w=125&ssl=1" />
-				</div>
-				<div style="margin-left: 25px;">
-					<h1 style="font-size: 20px;">Transform "Abundant Carts🛒" into "Successful Sales💹".</h1>
-					<p>
-						Say Good Bye🙋‍♂️! to your Abundant Carts, Sometimes users remove product from cart🛒, the reason could be unaffordability, this is the right time to secure the sale by offering a discount🚀.
-					</p>
-					<h4>
-						Grab Your 30% OFF By Using Coupon: "NPSPECIAL"
-					</h4>
-					<a href="https://coderpress.co/products/save-cart-for-woocommerce/?utm_source=npwc&utm_medium=notice&utm_campaign=1&utm_id=savecart" target="_blank" class="button button-primary" style="background-color: #ffd814; border-color: #ffd814; color: #0F1111; font-weight: 400;">Get Started</a>
-					<a href="<?php echo esc_url( admin_url( 'admin-post.php?action=npwc_hide_notice' ) ); ?>" style="vertical-align: -webkit-baseline-middle; margin-left: 20px;">Not interested</a>
-				</div>
-			</div>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Hide Notice | Action Callback
-	 *
-	 * @since 1.1.1
-	 * @version 1.0
-	 */
-	public function save_cart_hide_notice() {
-
-		update_option( 'npwc_hide_save_cart_notice', 1 );
-
-		wp_safe_redirect( wp_get_referer() );
-		exit;
 	}
 
 	/**
@@ -195,28 +135,39 @@ class NPWC_Init {
 	 * @version 1.0
 	 */
 	public function admin_enqueue_scripts() {
-		wp_enqueue_script(
-			'npwc-custom-scripts',
-			NPWC_PLUGIN_URL . 'assets/js/scripts.js',
-			array( 'jquery' ),
-			NPWC_VERSION,
-			true
+		wp_register_style(
+			'npwc-poppins',
+			'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap',
+			array(),
+			null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Google Fonts URL must not get a ver query arg.
 		);
 
-		wp_localize_script(
-			'npwc-custom-scripts',
-			'npwc',
-			array(
-				'images' => NPWC_PLUGIN_URL . 'assets/images/',
-			)
-		);
-
+		// Global: Pro badge + highlighted "Get Pro" menu item + Pro modal styles.
 		wp_enqueue_style(
 			'npwc-admin',
 			NPWC_PLUGIN_URL . 'assets/css/admin.css',
-			array(),
+			array( 'npwc-poppins' ),
 			NPWC_VERSION
 		);
+
+		// Settings UI script is only needed on WooCommerce → Settings → Payments.
+		if ( $this->is_checkout_settings_tab() ) {
+			wp_enqueue_script(
+				'npwc-custom-scripts',
+				NPWC_PLUGIN_URL . 'assets/js/scripts.js',
+				array( 'jquery' ),
+				NPWC_VERSION,
+				true
+			);
+
+			wp_localize_script(
+				'npwc-custom-scripts',
+				'npwc',
+				array(
+					'images' => NPWC_PLUGIN_URL . 'assets/images/',
+				)
+			);
+		}
 
 		if ( ! $this->is_dashboard_page() ) {
 			return;
@@ -228,13 +179,6 @@ class NPWC_Init {
 		}
 
 		$asset = require $asset_path;
-
-		wp_enqueue_style(
-			'npwc-dashboard-font',
-			'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap',
-			array(),
-			NPWC_VERSION
-		);
 
 		wp_enqueue_script(
 			'npwc-dashboard',
@@ -248,7 +192,7 @@ class NPWC_Init {
 			wp_enqueue_style(
 				'npwc-dashboard',
 				NPWC_PLUGIN_URL . 'assets/blocks/admin/dashboard.css',
-				array(),
+				array( 'npwc-poppins' ),
 				$asset['version']
 			);
 			wp_add_inline_style(
@@ -279,6 +223,7 @@ class NPWC_Init {
 				'npwc-dashboard',
 				array( $this, 'render_dashboard_page' )
 			);
+			$this->maybe_add_payment_settings_submenu( 'edit.php?post_type=nowpayment' );
 			$this->maybe_add_get_pro_submenu( 'edit.php?post_type=nowpayment' );
 			return;
 		}
@@ -302,8 +247,26 @@ class NPWC_Init {
 			array( $this, 'render_dashboard_page' )
 		);
 
+		$this->maybe_add_payment_settings_submenu( 'npwc-dashboard-root' );
 		$this->maybe_add_get_pro_submenu( 'npwc-dashboard-root' );
 		remove_submenu_page( 'npwc-dashboard-root', 'npwc-dashboard-root' );
+	}
+
+	/**
+	 * Add WooCommerce payment settings submenu (opens in a new browser tab).
+	 *
+	 * @param string $parent_slug Parent admin menu slug.
+	 * @return void
+	 */
+	private function maybe_add_payment_settings_submenu( $parent_slug ) {
+		add_submenu_page(
+			$parent_slug,
+			__( 'Payment Setting', 'nowpayments-for-woocommerce' ),
+			__( 'Payment Setting', 'nowpayments-for-woocommerce' ),
+			'manage_woocommerce',
+			'npwc-payment-settings',
+			array( $this, 'render_payment_settings_redirect_page' )
+		);
 	}
 
 	/**
@@ -398,20 +361,38 @@ class NPWC_Init {
 	}
 
 	/**
-	 * Make the "Get Pro Now" admin submenu open in a new browser tab.
+	 * Redirect admin "Payment Setting" submenu to WooCommerce NOWPayments gateway settings.
+	 *
+	 * @return void
+	 */
+	public function render_payment_settings_redirect_page() {
+		if ( ! current_user_can( 'manage_woocommerce' ) ) {
+			wp_die( esc_html__( 'Sorry, you are not allowed to access this page.', 'nowpayments-for-woocommerce' ) );
+		}
+
+		wp_safe_redirect( $this->get_payment_settings_url() );
+		exit;
+	}
+
+	/**
+	 * Make selected NOWPayments admin submenu links open in a new browser tab.
 	 *
 	 * @return void
 	 */
 	public function print_get_pro_menu_new_tab_script() {
-		if ( ! $this->should_show_get_pro_submenu() ) {
-			return;
+		$new_tab_pages = array( 'npwc-payment-settings' );
+		if ( $this->should_show_get_pro_submenu() ) {
+			$new_tab_pages[] = 'npwc-get-pro';
 		}
 		?>
 		<script>
 		(function () {
-			document.querySelectorAll( 'a[href*="page=npwc-get-pro"]' ).forEach( function ( el ) {
-				el.setAttribute( 'target', '_blank' );
-				el.setAttribute( 'rel', 'noopener noreferrer' );
+			var pages = <?php echo wp_json_encode( $new_tab_pages ); ?>;
+			pages.forEach( function ( page ) {
+				document.querySelectorAll( 'a[href*="page=' + page + '"]' ).forEach( function ( el ) {
+					el.setAttribute( 'target', '_blank' );
+					el.setAttribute( 'rel', 'noopener noreferrer' );
+				} );
 			} );
 		})();
 		</script>
@@ -437,7 +418,54 @@ class NPWC_Init {
 		if ( $this->is_dashboard_page() ) {
 			$classes .= ' npwc-dashboard-admin-page';
 		}
+
+		if ( $this->is_nowpayments_gateway_settings_page() ) {
+			$mode     = $this->get_nowpayments_gateway_api_mode();
+			$classes .= ' npwc-nowpayments-settings-page npwc-active-mode-' . sanitize_html_class( $mode );
+		}
+
 		return $classes;
+	}
+
+	/**
+	 * Whether the current admin screen is WooCommerce NOWPayments gateway settings.
+	 *
+	 * @return bool
+	 */
+	private function is_nowpayments_gateway_settings_page() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only screen check.
+		$page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only screen check.
+		$tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only screen check.
+		$section = isset( $_GET['section'] ) ? sanitize_text_field( wp_unslash( $_GET['section'] ) ) : '';
+
+		if ( 'wc-settings' === $page && 'checkout' === $tab && 'nowpayments' === $section ) {
+			return true;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only screen check.
+		$path = isset( $_GET['path'] ) ? sanitize_text_field( wp_unslash( $_GET['path'] ) ) : '';
+
+		return 'wc-settings' === $page && false !== stripos( $path, 'nowpayments' );
+	}
+
+	/**
+	 * Active NOWPayments API mode for settings UI (live or sandbox).
+	 *
+	 * @return string
+	 */
+	private function get_nowpayments_gateway_api_mode() {
+		if ( ! function_exists( 'WC' ) || ! WC()->payment_gateways() ) {
+			return 'live';
+		}
+
+		$gateways = WC()->payment_gateways()->payment_gateways();
+		if ( empty( $gateways['nowpayments'] ) || ! is_a( $gateways['nowpayments'], 'NPWC_Gateway' ) ) {
+			return 'live';
+		}
+
+		return $gateways['nowpayments']->get_api_mode();
 	}
 
 	/**
@@ -454,6 +482,20 @@ class NPWC_Init {
 		remove_all_actions( 'all_admin_notices' );
 		remove_all_actions( 'network_admin_notices' );
 		remove_all_actions( 'user_admin_notices' );
+	}
+
+	/**
+	 * Whether the current screen is WooCommerce → Settings → Payments (any section).
+	 *
+	 * @return bool
+	 */
+	private function is_checkout_settings_tab() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only screen check.
+		$page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only screen check.
+		$tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : '';
+
+		return 'wc-settings' === $page && ( 'checkout' === $tab || $this->is_nowpayments_gateway_settings_page() );
 	}
 
 	/**
@@ -481,37 +523,31 @@ class NPWC_Init {
 				'coin'  => 'BTC',
 				'count' => 612,
 				'total' => 184320,
-				'logo'  => $this->coin_logo_url( 'btc' ),
 			),
 			array(
 				'coin'  => 'ETH',
 				'count' => 481,
 				'total' => 121440,
-				'logo'  => $this->coin_logo_url( 'eth' ),
 			),
 			array(
 				'coin'  => 'USDT',
 				'count' => 392,
 				'total' => 88210,
-				'logo'  => $this->coin_logo_url( 'usdt' ),
 			),
 			array(
 				'coin'  => 'SOL',
 				'count' => 218,
 				'total' => 41210,
-				'logo'  => $this->coin_logo_url( 'sol' ),
 			),
 			array(
 				'coin'  => 'USDC',
 				'count' => 174,
 				'total' => 33880,
-				'logo'  => $this->coin_logo_url( 'usdc' ),
 			),
 			array(
 				'coin'  => 'LTC',
 				'count' => 95,
 				'total' => 14820,
-				'logo'  => $this->coin_logo_url( 'ltc' ),
 			),
 		);
 
@@ -657,125 +693,78 @@ class NPWC_Init {
 	 * @return array
 	 */
 	private function get_dashboard_data() {
-		$api_payload = $this->get_dashboard_api_payload();
-
-		if ( ! function_exists( 'wc_get_orders' ) ) {
-			$store_currency = function_exists( 'get_woocommerce_currency' ) ? get_woocommerce_currency() : 'USD';
-			$payload          = array(
-				'defaultTheme'       => $this->get_saved_dashboard_theme(),
-				'iconUrl'            => NPWC_PLUGIN_URL . 'assets/images/icon.png',
-				'storeCurrency'      => $store_currency,
-				'isPro'              => false,
-				'upgradeUrl'         => $this->get_upgrade_url(),
-				'restUrl'            => esc_url_raw( rest_url( 'npwc/v1/estimate' ) ),
-				'restNonce'          => wp_create_nonce( 'wp_rest' ),
-				'metrics'            => array(
-					'totalOrders'        => 0,
-					'successfulPayments' => 0,
-					'failedPayments'     => 0,
-					'refundedPayments'   => 0,
-				),
-				'statusBreakdown'    => array(
-					'finished' => 0,
-					'failed'   => 0,
-					'waiting'  => 0,
-					'refunded' => 0,
-				),
-				'revenueSeries'      => array(),
-				'topCoins'           => array(),
-				'recentTransactions' => array(),
-			);
-			$payload = $this->merge_dashboard_demo_teasers( $payload );
-
-			return array_merge( $payload, $api_payload );
-		}
-
-		$orders = wc_get_orders(
-			array(
-				'limit'          => 200,
-				'type'           => 'shop_order',
-				'orderby'        => 'date',
-				'order'          => 'DESC',
-				'payment_method' => 'nowpayments',
-				'status'         => array( 'pending', 'on-hold', 'processing', 'completed', 'failed', 'refunded' ),
-				'return'         => 'objects',
+		$orders = function_exists( 'wc_get_orders' )
+			? wc_get_orders(
+				array(
+					'limit'          => 200,
+					'type'           => 'shop_order',
+					'orderby'        => 'date',
+					'order'          => 'DESC',
+					'payment_method' => 'nowpayments',
+					'status'         => array( 'pending', 'on-hold', 'processing', 'completed', 'failed', 'refunded' ),
+					'return'         => 'objects',
+				)
 			)
-		);
+			: array();
 
-		$store_currency      = get_woocommerce_currency();
-		$total_orders        = count( $orders );
 		$successful_payments = 0;
 		$failed_payments     = 0;
 		$refunded_payments   = 0;
-		$waiting_payments    = 0;
-		$series_map = $this->get_dashboard_revenue_series_buckets();
+		$series_map          = $this->get_dashboard_revenue_series_buckets();
 
 		foreach ( $orders as $order ) {
 			$status = $order->get_status();
 			if ( in_array( $status, array( 'completed', 'processing' ), true ) ) {
 				++$successful_payments;
+
+				$order_date = $order->get_date_created();
+				if ( $order_date ) {
+					$date_key = wp_date( 'Y-m-d', $order_date->getTimestamp() );
+					if ( isset( $series_map[ $date_key ] ) ) {
+						$series_map[ $date_key ]['revenue'] += (float) $order->get_total();
+					}
+				}
 			} elseif ( 'failed' === $status ) {
 				++$failed_payments;
 			} elseif ( 'refunded' === $status ) {
 				++$refunded_payments;
-			} else {
-				++$waiting_payments;
-			}
-
-			$order_date = $order->get_date_created();
-			if ( $order_date && in_array( $status, array( 'completed', 'processing' ), true ) ) {
-				$date_key = wp_date( 'Y-m-d', $order_date->getTimestamp() );
-				if ( isset( $series_map[ $date_key ] ) ) {
-					$series_map[ $date_key ]['revenue'] += (float) $order->get_total();
-				}
 			}
 		}
 
 		$payload = array(
-			'defaultTheme'       => $this->get_saved_dashboard_theme(),
-			'iconUrl'            => NPWC_PLUGIN_URL . 'assets/images/icon.png',
-			'storeCurrency'      => $store_currency,
-			'isPro'              => false,
-			'upgradeUrl'         => $this->get_upgrade_url(),
-			'restUrl'            => esc_url_raw( rest_url( 'npwc/v1/estimate' ) ),
-			'restNonce'          => wp_create_nonce( 'wp_rest' ),
-			'metrics'            => array(
-				'totalOrders'        => $total_orders,
+			'defaultTheme'  => $this->get_saved_dashboard_theme(),
+			'iconUrl'       => NPWC_PLUGIN_URL . 'assets/images/icon.png',
+			'storeCurrency' => function_exists( 'get_woocommerce_currency' ) ? get_woocommerce_currency() : 'USD',
+			'upgradeUrl'    => $this->get_upgrade_url(),
+			'restNonce'     => wp_create_nonce( 'wp_rest' ),
+			'metrics'       => array(
+				'totalOrders'        => count( $orders ),
 				'successfulPayments' => $successful_payments,
 				'failedPayments'     => $failed_payments,
 				'refundedPayments'   => $refunded_payments,
 			),
-			'statusBreakdown'    => array(
-				'finished' => $successful_payments,
-				'failed'   => $failed_payments,
-				'waiting'  => $waiting_payments,
-				'refunded' => $refunded_payments,
-			),
-			'revenueSeries'      => array_values( $series_map ),
-			'topCoins'           => array(),
-			'recentTransactions' => array(),
+			'revenueSeries' => array_values( $series_map ),
 		);
 
+		// Pro-locked widgets (status donut, coins, transactions, revenue card) show demo data.
 		$payload = $this->merge_dashboard_demo_teasers( $payload );
 
-		return array_merge( $payload, $api_payload );
+		return array_merge( $payload, $this->get_dashboard_api_payload() );
 	}
 
 	/**
 	 * API configuration flags for the React dashboard.
 	 *
-	 * @return array{apiConfigured:int,settingsUrl:string,docsUrl:string} apiConfigured 1 = key present, 0 = missing (int for wp_localize_script; bool false becomes "" in JS).
+	 * @return array{apiConfigured:int,settingsUrl:string,docsUrl:string,themeRestUrl:string} apiConfigured 1 = key present, 0 = missing (int for wp_localize_script; bool false becomes "" in JS).
 	 */
 	private function get_dashboard_api_payload() {
-		$creds = $this->get_gateway_api_credentials();
-
 		$docs_url = apply_filters(
 			'npwc_dashboard_docs_url',
 			'https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=npwc-dashboard&utm_medium=api-banner&utm_campaign=documentation#setup'
 		);
 
 		return array(
-			'apiConfigured' => ! empty( $creds['api_key'] ) ? 1 : 0,
+			'apiConfigured' => '' !== $this->get_active_api_key() ? 1 : 0,
 			'settingsUrl'   => $this->get_payment_settings_url(),
 			'docsUrl'       => esc_url_raw( $docs_url ),
 			'themeRestUrl'  => esc_url_raw( rest_url( 'npwc/v1/dashboard-theme' ) ),
@@ -799,10 +788,13 @@ class NPWC_Init {
 	private function get_saved_dashboard_theme() {
 		$user_id = get_current_user_id();
 		if ( ! $user_id ) {
-			return 'dark';
+			return 'light';
 		}
 		$saved = get_user_meta( $user_id, 'npwc_dashboard_theme', true );
-		return ( 'light' === $saved ) ? 'light' : 'dark';
+		if ( '' === $saved ) {
+			return 'light';
+		}
+		return ( 'dark' === $saved ) ? 'dark' : 'light';
 	}
 
 	/**
@@ -811,31 +803,6 @@ class NPWC_Init {
 	 * @return void
 	 */
 	public function register_rest_routes() {
-		register_rest_route(
-			'npwc/v1',
-			'/estimate',
-			array(
-				'methods'             => \WP_REST_Server::READABLE,
-				'callback'            => array( $this, 'rest_estimate' ),
-				'permission_callback' => function () {
-					return current_user_can( 'manage_woocommerce' );
-				},
-				'args'                => array(
-					'amount'        => array(
-						'required' => true,
-					),
-					'currency_from' => array(
-						'required'          => true,
-						'sanitize_callback' => 'sanitize_text_field',
-					),
-					'currency_to'   => array(
-						'required'          => true,
-						'sanitize_callback' => 'sanitize_text_field',
-					),
-				),
-			)
-		);
-
 		register_rest_route(
 			'npwc/v1',
 			'/dashboard-theme',
@@ -893,133 +860,26 @@ class NPWC_Init {
 	}
 
 	/**
-	 * Proxy NOWPayments estimate endpoint (uses gateway API key).
+	 * API key for the active NOWPayments environment (live or sandbox).
 	 *
-	 * @param \WP_REST_Request $request Request.
-	 * @return \WP_REST_Response|\WP_Error
+	 * @return string Empty string when not configured.
 	 */
-	public function rest_estimate( \WP_REST_Request $request ) {
-		$creds = $this->get_gateway_api_credentials();
-		if ( empty( $creds['api_key'] ) ) {
-			return new \WP_Error(
-				'npwc_no_api',
-				__( 'Add your NOWPayments API key in WooCommerce → Settings → Payments → NOWPayments.', 'nowpayments-for-woocommerce' ),
-				array( 'status' => 400 )
-			);
-		}
-
-		$base = ! empty( $creds['sandbox'] ) ? 'https://api-sandbox.nowpayments.io/v1' : 'https://api.nowpayments.io/v1';
-		$url  = $base . '/estimate?' . http_build_query(
-			array(
-				'amount'        => $request->get_param( 'amount' ),
-				'currency_from' => strtolower( (string) $request->get_param( 'currency_from' ) ),
-				'currency_to'   => strtolower( (string) $request->get_param( 'currency_to' ) ),
-			),
-			'',
-			'&',
-			PHP_QUERY_RFC3986
-		);
-
-		$response = wp_remote_get(
-			$url,
-			array(
-				'headers' => array(
-					'x-api-key' => $creds['api_key'],
-				),
-				'timeout' => 25,
-			)
-		);
-
-		if ( is_wp_error( $response ) ) {
-			return new \WP_Error( 'npwc_http', $response->get_error_message(), array( 'status' => 502 ) );
-		}
-
-		$code = wp_remote_retrieve_response_code( $response );
-		$body = json_decode( wp_remote_retrieve_body( $response ), true );
-
-		if ( $code >= 400 ) {
-			$message = is_array( $body ) && ! empty( $body['message'] ) ? (string) $body['message'] : __( 'NOWPayments estimate request failed.', 'nowpayments-for-woocommerce' );
-			return new \WP_Error( 'npwc_api', $message, array( 'status' => $code ) );
-		}
-
-		return rest_ensure_response( is_array( $body ) ? $body : array() );
-	}
-
-	/**
-	 * Read NOWPayments gateway API key and mode.
-	 *
-	 * @return array{api_key:string,sandbox:bool}
-	 */
-	private function get_gateway_api_credentials() {
-		$out = array(
-			'api_key' => '',
-			'sandbox' => false,
-		);
-
+	private function get_active_api_key() {
 		if ( ! function_exists( 'WC' ) || ! WC()->payment_gateways() ) {
-			return $out;
+			return '';
 		}
 
 		$gateways = WC()->payment_gateways()->payment_gateways();
-		if ( empty( $gateways['nowpayments'] ) || ! is_a( $gateways['nowpayments'], 'WC_Payment_Gateway', false ) ) {
-			return $out;
+		if ( empty( $gateways['nowpayments'] ) || ! is_a( $gateways['nowpayments'], 'NPWC_Gateway' ) ) {
+			return '';
 		}
 
-		/** @var \WC_Payment_Gateway $gateway */
-		$gateway          = $gateways['nowpayments'];
-		$out['sandbox']   = ( 'yes' === $gateway->get_option( 'sandbox' ) );
-		$key              = $out['sandbox'] ? $gateway->get_option( 'sandbox_api_key' ) : $gateway->get_option( 'live_api_key' );
-		$out['api_key']   = is_string( $key ) ? trim( $key ) : '';
+		$gateway = $gateways['nowpayments'];
+		$key     = $gateway->is_sandbox_mode() ? $gateway->get_option( 'sandbox_api_key' ) : $gateway->get_option( 'live_api_key' );
 
-		return $out;
+		return is_string( $key ) ? trim( $key ) : '';
 	}
 
-	/**
-	 * Map WooCommerce status to dashboard class.
-	 *
-	 * @param string $status Order status.
-	 * @return string
-	 */
-	private function status_to_class( $status ) {
-		if ( in_array( $status, array( 'completed', 'processing' ), true ) ) {
-			return 'finished';
-		}
-		if ( 'failed' === $status ) {
-			return 'failed';
-		}
-		if ( 'refunded' === $status ) {
-			return 'refunded';
-		}
-		return 'waiting';
-	}
-
-	/**
-	 * Detect paid coin from order meta.
-	 *
-	 * @param WC_Order $order Order object.
-	 * @return string
-	 */
-	private function extract_order_coin( $order ) {
-		$keys = array( 'pay_currency', 'price_currency', 'actually_paid_currency', 'npwc_coin', '_npwc_coin', 'coin', 'currency' );
-		foreach ( $keys as $key ) {
-			$value = $order->get_meta( $key, true );
-			if ( ! empty( $value ) ) {
-				return strtoupper( sanitize_text_field( (string) $value ) );
-			}
-		}
-		return strtoupper( $order->get_currency() );
-	}
-
-	/**
-	 * Resolve coin logo URL (Cryptoicon API).
-	 *
-	 * @param string $coin Coin symbol.
-	 * @return string
-	 */
-	private function coin_logo_url( $coin ) {
-		$coin = strtolower( $coin );
-		return 'https://coinicons-api.vercel.app/api/icon/' . rawurlencode( $coin );
-	}
 
 	/**
 	 * Filter Callback
@@ -1056,14 +916,6 @@ class NPWC_Init {
 	 */
 	public function plugin_action_links( $links ) {
 
-		$upgrade_link = sprintf(
-			'<a href="%s" style="color: green; font-weight: bold; font-family: Poppins, sans-serif;" target="_blank">%s</a>',
-			esc_url( 'https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=plugin-npwc&utm_medium=plugins-page&utm_campaign=upgrade-to-pro' ),
-			esc_html__( 'Upgrade to Pro', 'nowpayments-for-woocommerce' )
-		);
-
-		array_unshift( $links, $upgrade_link );
-
 		if ( current_user_can( 'manage_woocommerce' ) ) {
 			$settings_link = sprintf(
 				'<a href="%s">%s</a>',
@@ -1072,6 +924,12 @@ class NPWC_Init {
 			);
 			array_unshift( $links, $settings_link );
 		}
+
+		$links[] = sprintf(
+			'<a href="%s" style="color: green; font-weight: bold; font-family: Poppins, sans-serif;" target="_blank">%s</a>',
+			esc_url( 'https://coderpress.co/products/nowpayments-for-woocommerce/?utm_source=plugin-npwc&utm_medium=plugins-page&utm_campaign=upgrade-to-pro' ),
+			esc_html__( 'Upgrade to Pro', 'nowpayments-for-woocommerce' )
+		);
 
 		return $links;
 	}
@@ -1103,22 +961,5 @@ class NPWC_Init {
 	public function register_checkout_block( $payment_method_registry ) {
 
 		$payment_method_registry->register( new NowPaymentsGatewayBlock() );
-	}
-
-	/**
-	 * Add YooAnalytics Banner | Action Callback
-	 *
-	 * @since 1.2.5
-	 */
-	public function add_yooanalytics_banner() {
-
-		?>
-			<div class="yooanalytics-woocommerce-wc-product-page" style="padding: 10px">
-				<h3> 📊 Track your site's Views, Visitors & WooCommerce Purchase Journey for Free.</h3>
-				<a href="<?php echo esc_url( admin_url( '/plugin-install.php?tab=plugin-information&plugin=yooanalytics&TB_iframe=true&width=772&height=644' ) ); ?>" class="thickbox open-plugin-details-modal" aria-label="More information about Midnight Deals for WooCommerce" data-title="Midnight Deals for WooCommerce">
-					<img src="<?php echo esc_attr( NPWC_PLUGIN_URL . '/assets/images/yooanalytics.png' ); ?>" style="width: 100%;" />
-				</a>
-			</div>
-		<?php
 	}
 }
